@@ -1,0 +1,41 @@
+<app-publier></app-publier>
+
+<h2>Fil d'actualité</h2>
+<section>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-xs-12" *ngFor="let post of posts">
+                <div class="card" style="width: 22rem;">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.userName }}</h2>
+                        <h3 style="font-size: 10px;">Publié le {{ post.date | date: 'dd/MM/yyyy' }} à {{ post.date |
+                            date:'HH:mm' }}
+                        </h3>
+                        <p class="card-text" style="font-size: 16px">{{ post.sujet }}</p>
+                        <div class="card-image" style="width: 100%">
+                            <img [src]="post.imageUrl" width="320px" alt="Card image cap">
+                        </div>
+                        <h4 style="font-size: 12px;">{{ post.liked }} j'aimes</h4>
+                        <h4 style="font-size: 12px;">{{ post.commentaires }} commentaires</h4>
+                        <div class="text-center">
+                            <a href="#">
+                                <fa-icon [icon]="faThumbsUp"></fa-icon>
+                                J'aime
+                            </a>
+                            <a href="#">
+                                <fa-icon [icon]="faCommentAlt"></fa-icon>Commenter
+                            </a>
+                            <a href="#">
+                                <fa-icon [icon]="faShare"></fa-icon>Partager
+                            </a>
+                        </div><br>
+                        <button class="btn btn-primary" [routerLink]="post.postId">
+                            <span class="lora">Voir la publication</span>
+                        </button>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>

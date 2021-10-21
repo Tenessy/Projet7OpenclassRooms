@@ -1,0 +1,17 @@
+.lora {
+    font-family: "Lora", serif;
+    font-size: 18px;
+}
+.cercle {
+    width: 30%;
+    height: 30%;
+    border-radius: 60px;
+    background-color: blueviolet;
+}
+img {
+    clip-path: ellipse(60px 60px);
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+
+}

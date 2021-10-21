@@ -1,0 +1,11 @@
+img {
+    clip-path: ellipse(60px 60px);
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.lora {
+    font-family: "Lora", serif;
+    font-size: 18px;
+    font-weight: bold;
+}

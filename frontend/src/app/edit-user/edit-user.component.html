@@ -1,0 +1,42 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
+    <div class="form-group" *ngFor="let editUser of user">
+        <div class="card-img">
+            <img [src]="editUser.imageUrl">
+        </div>
+        <label for="firstName" class="lora">Prénom</label>
+        <input type="text" class="form-control" id="firstName" value="editUser.firstName"
+            [(ngModel)]="editUser.firstName" formControlName="firstName" name="firstName">
+
+        <div class="form-group">
+            <label for="lastName" class="lora">Nom</label>
+            <input type="text" class="form-control" id="lastName" [(ngModel)]="editUser.lastName"
+                formControlName="lastName" value="editUser.lastName">
+        </div>
+        <div class="form-group">
+            <label for="date_de_naissance" class="lora">Date de naissance</label>
+            <input type="date" class="form-control" (change)="onChange($event)" id="date_de_naissance"
+                [(ngModel)]="editUser.date_de_naissance" value="editUser.date_de_naissance"
+                formControlName="date_de_naissance">
+        </div>
+        <div class="form-group">
+            <label for="adresse" class="lora">Adresse</label>
+            <input type="text" class="form-control" id="adresse" formControlName="adresse"
+                [(ngModel)]="editUser.adresse" value="editUser.adresse">
+        </div>
+        <div class="form-group">
+            <label for="cp" class="lora">Code postale</label>
+            <input type="text" class="form-control" id="cp" formControlName="cp" [(ngModel)]="editUser.code_postale"
+                value="editUser.code_postale">
+        </div>
+        <div class="form-group">
+            <label for="telephone" class="lora">Téléphone</label>
+            <input type="tel" class="form-control" id="telephone" formControlName="telephone"
+                [(ngModel)]="editUser.telephone" value="editUser.telephone">
+        </div><br>
+        <div class="form-group">
+            <label for="image" class="lora">Image</label>
+            <input type="file" class="form-control" id="image" (change)="onChangeImage($event)" name="image">
+        </div><br>
+    </div>
+    <button class="btn btn-primary" type="submit" [disabled]="userForm.invalid">Enregistrer</button>
+</form>

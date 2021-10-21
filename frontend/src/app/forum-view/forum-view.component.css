@@ -1,0 +1,9 @@
+div a {
+    text-decoration: none;
+    color: black;
+}
+.lora {
+    font-family: "Lora", serif;
+    font-size: 18px;
+    font-weight: bold;
+}
