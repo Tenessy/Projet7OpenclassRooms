@@ -28,7 +28,7 @@
             </li>
         </ul>
     </div><br>
-    <button class="btn btn-primary" (click)="editUser()">
+    <button class="btn btn-primary" [disabled]="!isAuth()" (click)="editUser()">
         <h4 class="lora"><strong>Modifier les informations</strong></h4>
     </button>
 </div>

@@ -1,11 +1,12 @@
 export class Post {
-    id: number;
-    userName: string;
-    image: File;
-    texte: string;
-    date: Date;
-    like: number;
-    commentaire: number;
-    userId: number;
+    constructor(
+        public texte: string,
+        public date?: Date,
+        public like?: number,
+        public commentaire?: number,
+        public postId?: number,
+        public userName?: string,
+        public userId?: number
+    ) { }
 }
 

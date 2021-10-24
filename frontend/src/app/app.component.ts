@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, interval, Subscription, BehaviorSubject } from 'rxjs';
-import 'rxjs/Rx';
 import { User } from './models/user.model';
 import { AuthService } from './services/auth.service';
 @Component({

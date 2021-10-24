@@ -11,24 +11,33 @@
                         <h3 style="font-size: 10px;">Publié le {{ post.date | date: 'dd/MM/yyyy' }} à {{ post.date |
                             date:'HH:mm' }}
                         </h3>
-                        <p class="card-text" style="font-size: 16px">{{ post.sujet }}</p>
+                        <p class="card-text" style="font-size: 16px">{{ post.texte }}</p>
                         <div class="card-image" style="width: 100%">
                             <img [src]="post.imageUrl" width="320px" alt="Card image cap">
                         </div>
                         <h4 style="font-size: 12px;">{{ post.liked }} j'aimes</h4>
                         <h4 style="font-size: 12px;">{{ post.commentaires }} commentaires</h4>
                         <div class="text-center">
-                            <a href="#">
+                            <a routerLink="">
                                 <fa-icon [icon]="faThumbsUp"></fa-icon>
                                 J'aime
                             </a>
-                            <a href="#">
+                            <a routerLink="" (click)="goComment(post.postId)">
                                 <fa-icon [icon]="faCommentAlt"></fa-icon>Commenter
                             </a>
                             <a href="#">
                                 <fa-icon [icon]="faShare"></fa-icon>Partager
                             </a>
                         </div><br>
+                        <form>
+                            <div class="form-group" [hidden]="!isClick">
+                                <label for="commentaire"></label>
+                                <textarea placeholder="écrivez un commentaire" id="commentaire"></textarea><br>
+                                <button class="btn btn-warning">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Poster</button>
+                            </div><br>
+                        </form>
+
                         <button class="btn btn-primary" [routerLink]="post.postId">
                             <span class="lora">Voir la publication</span>
                         </button>

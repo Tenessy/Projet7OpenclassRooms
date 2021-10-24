@@ -3,6 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../models/user.model';
+import { AuthService } from '../services/auth.service';
 import { PostService } from '../services/post.service';
 import { UserService } from '../services/user.service';
 
@@ -21,17 +22,38 @@ export class NewUserComponent implements OnInit {
     private userSerice: UserService,
     private postService: PostService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private authService: AuthService) { }
 
+
+  userId: any;
   ngOnInit(): void {
+    console.log(this.isAuth())
     const id = this.route.snapshot.params['id'];
     this.userSerice.getUser(id).subscribe(
       user => {
+        localStorage.setItem('user', JSON.stringify({ user: user[0] }))
         this.users = user;
         this.infoUsers = user
         console.log(this.infoUsers)
       }
-    )
+    );
+    this.authService.subject.subscribe(
+      val => {
+        //  localStorage.setItem('user', JSON.stringify({user: val}))
+        this.userId = val?.userId;
+        console.log(val);
+      }
+    );
+  }
+  isAuth() {
+    const id = JSON.parse(this.route.snapshot.params['id']);
+    if (id === this.userId) {
+      return true
+    }
+    else {
+      return false;
+    }
   }
   editUser() {
     const id = this.route.snapshot.params['id'];

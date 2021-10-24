@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AppRoutingModule } from './app-routing.module';
 
 import localeFr from '@angular/common/locales/fr';
 registerLocaleData(localeFr, 'fr');
@@ -20,25 +21,13 @@ import { OnePostComponent } from './one-post/one-post.component';
 import { PublierComponent } from './publier/publier.component';
 import { FourOhFourComponent } from './four-oh-four/four-oh-four.component';
 import { AuthGuard } from './services/auth-guard.service';
-import { UserListComponent } from './user-list/user-list.component';
 import { UserService } from './services/user.service';
 import { NewUserComponent } from './new-user/new-user.component';
 import { RegisterComponent } from './register/register.component';
 import { TokenInterceptor } from './services/tokenInterceptor';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { OnePostCommentComponent } from './one-post-comment/one-post-comment.component';
 
-
-const appRoutes: Routes = [
-  { path: 'forum', canActivate: [AuthGuard], component: ForumViewComponent },
-  { path: 'forum/:id', canActivate: [AuthGuard], component: OnePostComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: RegisterComponent },
-  { path: 'user/:id', component: NewUserComponent },
-  { path: 'user/:id/edit', component: EditUserComponent },
-  { path: 'new-user', component: NewUserComponent },
-  { path: 'not-found', component: FourOhFourComponent },
-  { path: '**', redirectTo: '/not-found' }
-];
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,17 +37,17 @@ const appRoutes: Routes = [
     OnePostComponent,
     PublierComponent,
     FourOhFourComponent,
-    UserListComponent,
     NewUserComponent,
     RegisterComponent,
     EditUserComponent,
+    OnePostCommentComponent,
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' }),
     FontAwesomeModule,
   ],
   providers: [PostService,

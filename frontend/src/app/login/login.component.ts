@@ -49,7 +49,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription = this.userService.login(email, password)
       .subscribe(
         result => {
-          this.authService.signIn(result)
+          this.authService.signIn(result);
+          console.log(result);
           this.router.navigateByUrl('/forum');
         },
         error => {

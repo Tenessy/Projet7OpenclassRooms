@@ -1,8 +1,6 @@
-import { analyzeAndValidateNgModules } from "@angular/compiler";
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, Router, UrlTree, UrlSegment } from "@angular/router";
-import { faThumbsDown } from "@fortawesome/free-solid-svg-icons";
-import { Observable, interval, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { AuthService } from "./auth.service";
 
 

@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-register',
@@ -46,7 +47,6 @@ export class RegisterComponent implements OnInit {
     this.userService.register(newUser)
       .subscribe(
         () => {
-          //   localStorage.setItem('user', JSON.stringify({ user: newUser }))
           console.log('La création de l\'utilisateur dans la bdd a bien été faites !' + formValue)
         },
         (error) => {

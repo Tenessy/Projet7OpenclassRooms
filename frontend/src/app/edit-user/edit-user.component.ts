@@ -1,10 +1,11 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Edit } from '../models/edit.model';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router, RouteReuseStrategy } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { ThrowStmt } from '@angular/compiler';
+import { AuthService } from '../services/auth.service';
+
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
@@ -17,11 +18,18 @@ export class EditUserComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private authService: AuthService) { }
   user: any = [];
   birth: any = new DatePipe('en-US').transform
+  viewDelete: Boolean = false;
   ngOnInit(): void {
     this.initForm();
+    this.authService.subject.subscribe(
+      val => {
+        console.log(val);
+      }
+    )
     const id = this.route.snapshot.params['id'];
     this.userService.getInfoUser(id)
       .subscribe(
@@ -62,7 +70,7 @@ export class EditUserComponent implements OnInit {
     this.userService.editUser(id, formData)
       .subscribe(
         data => {
-          this.router.navigate(['/forum']);
+          this.router.navigate([`/user/${id}`]);
           console.log(data);
         },
         error => {
@@ -71,7 +79,6 @@ export class EditUserComponent implements OnInit {
       );
   }
   initForm() {
-  
     this.userForm = this.formBuilder.group({
       firstName: [''],
       lastName: [''],
@@ -82,5 +89,23 @@ export class EditUserComponent implements OnInit {
       image: [this.file]
     });
   }
-
+  viewDeleteUser($event: any) {
+    if (this.viewDelete === false) {
+      this.viewDelete = true;
+    }
+    else {
+      this.viewDelete = false;
+    }
+  }
+  deleteUser() {
+    const id = this.route.snapshot.params['id'];
+    this.userService.deleteOneUser(id).subscribe(
+      val => {
+        console.log('Le compte  bien été supprimer' + val)
+      },
+      err => {
+        console.log(err)
+      }
+    )
+  }
 }

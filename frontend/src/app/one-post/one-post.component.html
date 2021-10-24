@@ -1,5 +1,59 @@
-<div class="card" *ngFor="let onePost of post">
-    <h2>{{ onePost.userName }}</h2>
-    <p>Statut: {{ texte }}</p>
-    <a routerLink="/forum">Retour à la liste</a>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-xs-12" *ngFor="let post of posts">
+            <div class="card" style="width: 22rem;">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.userName }}</h2>
+                    <h3 style="font-size: 10px;">Publié le {{ post.date | date: 'dd/MM/yyyy' }} à {{ post.date |
+                        date:'HH:mm' }}
+                    </h3>
+                    <p class="card-text" style="font-size: 16px">{{ post.texte }}</p>
+                    <div class="card-image" style="width: 100%">
+                        <img [src]="post.imageUrl" width="320px" alt="Card image cap">
+                    </div>
+                    <h4 style="font-size: 12px;">{{ post.liked }} j'aimes</h4>
+                    <h4 style="font-size: 12px;">{{ post.commentaires }} commentaires</h4>
+                    <div class="text-center">
+                        <a href="#">
+                            <fa-icon [icon]="faThumbsUp"></fa-icon>
+                            J'aime
+                        </a>
+                        <a href="#">
+                            <fa-icon [icon]="faCommentAlt"></fa-icon>Commenter
+                        </a>
+                        <a href="#">
+                            <fa-icon [icon]="faShare"></fa-icon>Partager
+                        </a>
+                    </div><br>
+                    <form>
+                        <div class="form-group">
+                            <label class="sr-only" for="comment">Commentaire</label>
+                            <input class="texteStyle" placeholder="Écrivez un commentaire..." id="comment"
+                                [formControl]="comment"><br><br>
+                            <button type="button" class="btn btn-dark">Annuler</button>
+                            <button type="submit" (click)="postComment()" class="btn btn-primary">Poster</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
 </div>
+<div class="col-xs-12" *ngFor="let comment of comments">
+    <div class="profil">
+        <div class="card-image position">
+            <img [src]="comment.imageUrl" class="avatar">
+        </div>
+        <h3 class="lora gras pos"><a routerLink="" (click)="viewUser(comment.userId)">{{ comment.userName }}</a></h3>
+        <h4 class="lora heure" *ngIf="today - comment.commentDate <= 60000">{{ today - comment.commentDate | date:
+            's':'+0000' }} sec </h4>
+        <h4 class="lora heure" *ngIf="today - comment.commentDate >= 60000 &&  today - comment.commentDate <= 3600000">
+            {{ today - comment.commentDate | date: 'm':'+0000' }} min </h4>
+        <h4 class="lora heure" *ngIf="today - comment.commentDate >= 3600000">{{ today - comment.commentDate | date:
+            'H':'+0000'}} h </h4>
+        <h4 class="lora heure" *ngIf="today - comment.commentDate >= 86400000">{{ today - comment.commentDate | date:
+            'd':'+0000' }} j </h4>
+    </div>
+    <h3 class="lora fin comment">{{ comment.commentaire }}</h3>
+</div><br>
