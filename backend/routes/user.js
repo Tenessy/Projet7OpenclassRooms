@@ -9,6 +9,7 @@ router.post('/signup', controllers.registerUser);
 router.post('/login', controllers.loginUser);
 router.get('/user/:id', auth, controllers.getUsers);
 router.put('/user/:id/edit', auth, multer, controllers.editUser);
-router.get('/user/:id/edit',auth,multer,controllers.getInfoUser);
+router.get('/user/:id/edit', auth, multer, controllers.getInfoUser);
+router.delete('/user/:id/edit', auth, controllers.deleteUser);
 
 module.exports = router;

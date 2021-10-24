@@ -10,11 +10,11 @@ exports.createPost = (req, res, next) => {
     const commentaire = post.commentaire;
     const userName = post.userName;
     const userId = post.userId;
-    const postId = post.id;
+    const postId = post.postId;
     console.log(postId);
     console.log(userId);
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-    db.query('INSERT INTO forum (sujet, postId, imageUrl, date, liked, commentaires, userName, userId) VALUES (?,?,?,?,?,?,?,?)',
+    db.query('INSERT INTO forum (texte, postId, imageUrl, date, liked, commentaires, userName, userId) VALUES (?,?,?,?,?,?,?,?)',
         [texte, postId, imageUrl, date, like, commentaire, userName, userId],
         (error, data, field) => {
             if (error) {
@@ -32,7 +32,7 @@ exports.createPost = (req, res, next) => {
 }
 
 exports.getAllPosts = (req, res, next) => {
-    db.query('SELECT * FROM forum', (error, data, field) => {
+    db.query('SELECT * FROM forum ORDER BY date DESC', (error, data, field) => {
         if (error) {
             console.log(error);
             res.status(400).json({ message: error });
@@ -44,7 +44,7 @@ exports.getAllPosts = (req, res, next) => {
 }
 
 exports.getOnePost = (req, res, next) => {
-    db.query(`SELECT * from forum  WHERE postId = ?`, [req.params.id], (error, data, field) => {
+    db.query(`SELECT texte, userName, date, nbrCommentaires, nbrLikes, imageUrl FROM forum  WHERE postId = ?`, [req.params.id], (error, data, field) => {
         if (error) {
             console.log(error);
             res.status(400).json({ message: error });
@@ -112,6 +112,42 @@ exports.getInfoUser = (req, res, next) => {
                 res.status(200).json(data);
             }
         })
+}
+
+exports.postOneComment = (req, res, next) => {
+    const post = JSON.parse(req.body.comment);
+    const comment = post.commentaire;
+    const date = post.date;
+    const user = JSON.parse(req.body.user);
+    const imageUrl = user.imageUrl;
+    const userName = user.firstName;
+    const userId = user.userId;
+    console.log(user);
+    db.query('INSERT INTO commentaires (commentaire, userId, imageUrl, userName, commentDate, postId) VALUES (?,?,?,?,?,?)',
+        [comment, userId, imageUrl, userName, date, req.params.id],
+        (err, data, field) => {
+            if (err) {
+                console.log(err)
+                res.status(400).json({ err })
+            }
+            else {
+                res.status(201).json({ message: 'Le commentaire a bien été posté !' });
+            }
+        });
+}
+
+exports.getCommentsOnePost = (req, res, next) => {
+    db.query('SELECT commentaire, imageUrl, userName, userId, commentDate FROM commentaires WHERE postId = ? ORDER BY commentDate DESC', [req.params.id],
+        (err, data, field) => {
+            if (err) {
+                console.log(err)
+                res.status(400).json({ err })
+            }
+            else {
+                console.log(data);
+                res.status(200).json(data);
+            }
+        });
 }
 exports.modifyOnePost = (req, res, next) => {
 

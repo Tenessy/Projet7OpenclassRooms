@@ -50,7 +50,7 @@ exports.loginUser = (req, res, next) => {
                         '123321190289023',
                         { expiresIn: '24h' }
                     );
-                    db.query('SELECT userId,firstName,lastName FROM user WHERE email = ?', [email], (error, data, field) => {
+                    db.query('SELECT userId,firstName,lastName,imageUrl FROM user WHERE email = ?', [email], (error, data, field) => {
                         if (error) {
                             console.log(error)
                         }
@@ -70,12 +70,13 @@ exports.loginUser = (req, res, next) => {
 
 exports.getUsers = (req, res, next) => {
     console.log(req.params);
-    db.query('SELECT * FROM user WHERE userId = ?', [req.params.id], (error, data, field) => {
+    db.query('SELECT firstName, email, userId, lastName, code_postale, adresse, date_de_naissance, telephone, imageUrl FROM user WHERE userId = ?', [req.params.id], (error, data, field) => {
         if (error) {
             console.log(error);
             res.status(400).json({ message: error });
         }
         else {
+            console.log(data)
             res.status(200).json(data);
         }
     });
@@ -109,22 +110,38 @@ exports.editUser = (req, res, next) => {
                     res.status(400).json({ err })
                 }
                 else {
-                    console.log('Tout est OK' + data);
+                    console.log('Tout est OK');
                     res.status(200).json({ message: 'Modification de l\'user Ok' })
                 }
             });
+
     });
 }
 
 exports.getInfoUser = (req, res, next) => {
-    db.query('SELECT firstName, lastName, code_postale, adresse, date_de_naissance, telephone, imageUrl from user WHERE userId = ?'
+    db.query('SELECT firstName, userId, lastName, code_postale, adresse, date_de_naissance, telephone, imageUrl FROM user WHERE userId = ?'
         , [req.params.id], (err, data, field) => {
             if (err) {
                 console.log(err)
-                res.status(400).json({ err })
+                res.status(400).json({ message: err })
             }
             else {
+                console.log(data);
                 res.status(200).json(data);
+            }
+        })
+}
+
+exports.deleteUser = (req, res, next) => {
+    console.log(req.params.id);
+    db.query('DELETE FROM user WHERE userId = ?', [req.params.id],
+        (err, data, field) => {
+            if (err) {
+                console.log(err);
+                res.status(400).json({ message: err })
+            }
+            else {
+                res.status(200).json({ message: 'Votre compte a été supprimer avec succès !' })
             }
         })
 }
