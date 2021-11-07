@@ -4,6 +4,7 @@ const fs = require('fs');
 exports.createPost = (req, res, next) => {
     const post = JSON.parse(req.body.post);
     console.log(post);
+    console.log(req);
     const texte = post.texte;
     const date = post.date;
     const like = post.like;
@@ -11,11 +12,12 @@ exports.createPost = (req, res, next) => {
     const userName = post.userName;
     const userId = post.userId;
     const postId = post.postId;
+    const likeStatus = post.likeStatus;
     console.log(postId);
     console.log(userId);
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-    db.query('INSERT INTO forum (texte, postId, imageUrl, date, liked, commentaires, userName, userId) VALUES (?,?,?,?,?,?,?,?)',
-        [texte, postId, imageUrl, date, like, commentaire, userName, userId],
+    db.query('INSERT INTO forum (texte, postId, imageUrl, date, nbrLikes, nbrCommentaires, userName, userId, likeStatus) VALUES (?,?,?,?,?,?,?,?,?)',
+        [texte, postId, imageUrl, date, 0, 0, userName, userId, likeStatus],
         (error, data, field) => {
             if (error) {
                 console.log(error);
@@ -38,13 +40,14 @@ exports.getAllPosts = (req, res, next) => {
             res.status(400).json({ message: error });
         }
         else {
+            console.log(data)
             res.status(200).json(data);
         }
     });
 }
 
 exports.getOnePost = (req, res, next) => {
-    db.query(`SELECT texte, userName, date, nbrCommentaires, nbrLikes, imageUrl FROM forum  WHERE postId = ?`, [req.params.id], (error, data, field) => {
+    db.query(`SELECT * FROM forum  WHERE postId = ?`, [req.params.id], (error, data, field) => {
         if (error) {
             console.log(error);
             res.status(400).json({ message: error });
@@ -55,6 +58,24 @@ exports.getOnePost = (req, res, next) => {
         }
     });
 }
+
+exports.updateOnePost = (req, res, next) => {
+    const post = JSON.parse(req.body.post);
+    const likeStatus = post.likeStatus;
+    const postId = post.postId;
+    const nbrLikes = post.nbrLikes;
+    db.query('UPDATE forum SET nbrLikes = ?, likeStatus = ? WHERE postId = ?', [nbrLikes, likeStatus, postId], (err, data, field) => {
+        if (err) {
+            console.log(err)
+            res.status(400).json({ message: err })
+        }
+        else {
+            console.log(data);
+            res.status(200).json({ message: 'le post a bien été modifié !' })
+        }
+    })
+}
+
 exports.getUsers = (req, res, next) => {
     console.log(req.params);
     db.query('SELECT * FROM user WHERE userId = ?', [req.params.id], (error, data, field) => {
@@ -144,11 +165,63 @@ exports.getCommentsOnePost = (req, res, next) => {
                 res.status(400).json({ err })
             }
             else {
-                console.log(data);
+                db.query('UPDATE forum SET forum.nbrCommentaires = ? WHERE forum.postId = ?', [data.length, req.params.id], (err, data, field) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(500).json({ err })
+                    }
+                })
+                console.log(data.length)
                 res.status(200).json(data);
             }
         });
 }
+exports.postLikes = (req, res, next) => {
+    console.log(req);
+    const post = JSON.parse(req.body.post);
+    const userId = post.userId;
+    const postId = post.postId;
+    db.query('INSERT INTO likes (userId_like, post_id) VALUES (?,?)', [userId, postId], (err, data, field) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({ message: err });
+
+        }
+        else {
+            db.query
+            res.status(200).json({ message: 'Les likes ont bien été mis à jour !' })
+        }
+    });
+}
+exports.getlikes = (req, res, next) => {
+    db.query('SELECT * FROM likes', (error, data, field) => {
+        if (error) {
+            console.log(error);
+            res.status(400).json({ message: error });
+        }
+        else {
+            console.log(data.length);
+            res.status(200).json(data);
+        }
+    });
+}
+exports.deleteUserIdLikes = (req, res, next) => {
+    console.log(req);
+    const post = req.body.post;
+    const userId = post.userId;
+    const postId = post.postId;
+    db.query('DELETE FROM likes WHERE userId_Like = ? AND post_id = ?', [userId, postId],
+        (err, data, field) => {
+            if (err) {
+                console.log(err);
+                res.status(400).json({ message: err })
+            }
+            else {
+                res.status(200).json({ message: 'Suppresion de l\'userId like avec succès' });
+            }
+        });
+}
+
 exports.modifyOnePost = (req, res, next) => {
 
 }
