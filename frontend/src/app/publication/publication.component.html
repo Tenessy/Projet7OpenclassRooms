@@ -1,0 +1,34 @@
+<div class="card-body" *ngIf="post">
+    <h2 class="card-title">{{ post.userName }}</h2>
+    <h3 style="font-size: 10px;">Publié le {{ post.date | date: 'dd/MM/yyyy' }} à {{ post.date |
+        date:'HH:mm' }}
+    </h3>
+    <p class="card-text" style="font-size: 16px">{{ post.texte }}</p>
+</div>
+<div class="card-image">
+    <img [src]="post.imageUrl" alt="Card image cap">
+</div>
+<div class="card-body">
+    <div class="text-center d-flex flex-row justify-content-center">
+        <div class="col-4">
+            <fa-icon (click)="like(post)" class="hover-color" *ngIf="!post.likeStatus" [icon]="farThumbsUp"
+                style="font-size: 20px;">
+            </fa-icon>
+            <fa-icon (click)="unLike(post)" class="color" *ngIf="post.likeStatus" [icon]="fasThumbsUp"
+                style="font-size: 20px;">
+            </fa-icon>
+            <span class="lora gras"> {{ post.nbrLikes }} </span>
+        </div>
+        <div class="col-4">
+            <a routerLink="" (click)="goComment(post.postId)">
+                <fa-icon class="hover-color"[icon]="faCommentAlt" style="font-size: 20px;"></fa-icon>
+            </a>
+            <span class="lora gras"> {{ post.nbrCommentaires }} </span>
+        </div>
+        <div class="col-4">
+            <a href="#">
+                <fa-icon class="hover-color" [icon]="faShare" style="font-size: 20px;"></fa-icon>
+            </a>
+        </div>
+    </div>
+</div>

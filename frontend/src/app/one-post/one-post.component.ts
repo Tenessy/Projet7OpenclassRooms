@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { PostService } from '../services/post.service';
@@ -10,10 +10,10 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-one-post',
   templateUrl: './one-post.component.html',
-  styleUrls: ['./one-post.component.css',
-    '../../../node_modules/bootstrap/dist/css/bootstrap.css']
+  styleUrls: ['./one-post.component.css']
 })
 export class OnePostComponent implements OnInit, OnDestroy {
+  @Input() item = '';
 
   userName: string;
   texte: string;

@@ -1,0 +1,20 @@
+div a {
+    text-decoration: none;
+    color: black;
+}
+.lora {
+    font-family: "Lora", serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+.ng-fa-icon.hover-color:hover {
+    color: #1edf88;
+}
+.ng-fa-icon.color {
+    color: #1edf88;
+}
+
+img {
+    height: auto;
+    width: 100%;
+}

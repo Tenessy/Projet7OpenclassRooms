@@ -10,8 +10,7 @@ import { from, pipe, Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css',
-    '../../../node_modules/bootstrap/dist/css/bootstrap.css']
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
 

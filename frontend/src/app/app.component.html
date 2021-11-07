@@ -8,34 +8,31 @@
     <div class="row">
       <div class="col-xs-12">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <img src="assets/logo/icon-left-font-monochrome-black.svg" alt="">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="(user | async) !== null">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" routerLink="/forum">Accueil</a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" routerLink="/signup">Inscription</a>
-              </li>
-            </ul>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Profil
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" (click)="viewUser()">Voir le profil</a>
-                <a class="dropdown-item" (click)="signOut()">Déconnexion</a>
+          <div class="col-6">
+            <img src="assets/logo/icon-left-font-monochrome-black.svg" alt="" width="300px">
+          </div>
+          <div class="col-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="(user | async) !== null">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" routerLink="/forum">Accueil</a>
+                </li>
+              </ul>
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  Profil
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                  <li><button class="dropdown-item" type="button" (click)="viewUser()">Voir le profil</button></li>
+                  <li><button class="dropdown-item" type="button" (click)="signOut()">Déconnexion</button></li>
+                </ul>
               </div>
-            </li>
-            <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            </div>
           </div>
         </nav>
       </div>
@@ -45,42 +42,41 @@
 <router-outlet></router-outlet>
 <div class="container">
   <footer class="py-5">
-    <div class="d-flex justify-content-between py-4 my-4 border-top"></div>
-   <div class="d-flex">
-     <div class="col-2">
-       <h5>Section</h5>
-       <ul class="nav flex-column">
-         <li class="nav-item mb-2">Home</li>
-         <li class="nav-item mb-2">Features</li>
-         <li class="nav-item mb-2">Pricing</li>
-         <li class="nav-item mb-2">Faqs</li>
-         <li class="nav-item mb-2">About</li>
-       </ul>
-     </div>
-     <div class="col-2">
-      <h5>Section</h5>
-      <ul class="nav flex-column">
-        <li class="nav-item mb-2">Home</li>
-        <li class="nav-item mb-2">Features</li>
-        <li class="nav-item mb-2">Pricing</li>
-        <li class="nav-item mb-2">Faqs</li>
-        <li class="nav-item mb-2">About</li>
-      </ul>
+    <div class="my-4 border-top"></div>
+    <div class="d-flex flex-row justify-content-between">
+      <div class="col-2">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">Home</li>
+          <li class="nav-item mb-2">Features</li>
+          <li class="nav-item mb-2">Pricing</li>
+          <li class="nav-item mb-2">Faqs</li>
+          <li class="nav-item mb-2">About</li>
+        </ul>
+      </div>
+      <div class="col-2">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">Home</li>
+          <li class="nav-item mb-2">Features</li>
+          <li class="nav-item mb-2">Pricing</li>
+          <li class="nav-item mb-2">Faqs</li>
+          <li class="nav-item mb-2">About</li>
+        </ul>
+      </div>
+      <div class="col-2">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">Home</li>
+          <li class="nav-item mb-2">Features</li>
+          <li class="nav-item mb-2">Pricing</li>
+          <li class="nav-item mb-2">Faqs</li>
+          <li class="nav-item mb-2">About</li>
+        </ul>
+      </div>
     </div>
-    <div class="col-2">
-      <h5>Section</h5>
-      <ul class="nav flex-column">
-        <li class="nav-item mb-2">Home</li>
-         <li class="nav-item mb-2">Features</li>
-         <li class="nav-item mb-2">Pricing</li>
-         <li class="nav-item mb-2">Faqs</li>
-         <li class="nav-item mb-2">About</li>
-      </ul>
+    <div class="d-flex justify-content-between py-4 my-4 border-top">
+      <p>© 2021 Company, Inc. All rights reserved.</p>
     </div>
-   </div>
-   <div class="d-flex justify-content-between py-4 my-4 border-top">
-     <p>© 2021 Company, Inc. All rights reserved.</p>
-
-   </div>
   </footer>
 </div>

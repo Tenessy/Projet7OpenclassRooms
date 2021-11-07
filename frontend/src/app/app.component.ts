@@ -1,13 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, interval, Subscription, BehaviorSubject } from 'rxjs';
 import { User } from './models/user.model';
 import { AuthService } from './services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css',
-    "../../node_modules/bootstrap/dist/css/bootstrap.css"]
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, OnDestroy {
 

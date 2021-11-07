@@ -9,8 +9,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css',
-    '../../../node_modules/bootstrap/dist/css/bootstrap.css']
+  styleUrls: ['./edit-user.component.css']
 })
 export class EditUserComponent implements OnInit {
 

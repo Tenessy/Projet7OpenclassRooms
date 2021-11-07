@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faFileVideo, faImage } from '@fortawesome/free-solid-svg-icons';
@@ -9,8 +9,8 @@ import { User } from '../models/user.model'
 @Component({
   selector: 'app-publier',
   templateUrl: './publier.component.html',
-  styleUrls: ['./publier.component.css',
-    '../../../node_modules/bootstrap/dist/css/bootstrap.css']
+  styleUrls: ['./publier.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class PublierComponent implements OnInit {
   faFileVideo = faFileVideo;
@@ -45,12 +45,14 @@ export class PublierComponent implements OnInit {
     this.postForm = this.formBuilder.group({
       texte: ['', [Validators.required, Validators.minLength(6)]],
       date: [new Date(), [Validators.required]],
-      like: [0, [Validators.required]],
-      commentaire: [0, [Validators.required]],
+      nbrLikes: [0, [Validators.required]],
+      nbrCommentaires: [0, [Validators.required]],
       postId: [postId, [Validators.required]],
+      imageUrl: [this.image],
       userName: [userName, [Validators.required]],
-      userId: [userId, [Validators.required]]
-    });
+      userId: [userId, [Validators.required]],
+      likeStatus: [false, [Validators.required]]
+    })
   }
 
   onSubmitForm() {
@@ -58,24 +60,23 @@ export class PublierComponent implements OnInit {
     const post = new Post(
       formValue['texte'],
       formValue['date'],
-      formValue['like'],
-      formValue['commentaire'],
+      formValue['nbrLikes'],
+      formValue['nbrCommentaires'],
       formValue['postId'],
+      formValue['imageUrl'],
       formValue['userName'],
-      formValue['userId']
+      formValue['userId'],
+      formValue['likeStatus'],
     );
     const formData: any = new FormData();
     formData.append('image', this.image);
     formData.append('post', JSON.stringify(post));
 
-    this.postService.newPost(formData)
-      .subscribe(
-        val => {
-          console.log(val);
-        },
-        error => {
-          console.log('Erreur' + error)
-        }
-      );
+    this.postService.newPost(formData).subscribe(
+      val => {
+        console.log(val);
+      },
+    );
+
   }
 }

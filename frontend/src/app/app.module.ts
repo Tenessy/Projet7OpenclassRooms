@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
+import { NgbActiveModal, NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import localeFr from '@angular/common/locales/fr';
 registerLocaleData(localeFr, 'fr');
@@ -27,6 +28,10 @@ import { RegisterComponent } from './register/register.component';
 import { TokenInterceptor } from './services/tokenInterceptor';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { OnePostCommentComponent } from './one-post-comment/one-post-comment.component';
+import { PublicationComponent } from './publication/publication.component';
+import { TestComponent } from './test/test.component';
+import { NgbdModalConfirm, NgbdModalFocus, NgbdModalConfirmAutofocus } from './confirmation-dialog/confirmation-dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -41,7 +46,13 @@ import { OnePostCommentComponent } from './one-post-comment/one-post-comment.com
     RegisterComponent,
     EditUserComponent,
     OnePostCommentComponent,
+    PublicationComponent,
+    TestComponent,
+    NgbdModalConfirm,
+    NgbdModalFocus,
+    NgbdModalConfirmAutofocus
   ],
+  entryComponents: [NgbdModalConfirm, NgbdModalFocus, NgbdModalConfirmAutofocus],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -49,12 +60,15 @@ import { OnePostCommentComponent } from './one-post-comment/one-post-comment.com
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    BrowserAnimationsModule,
+    NgbModule,
   ],
   providers: [PostService,
     { provide: LOCALE_ID, useValue: 'fr' },
     [AuthGuard],
     UserService,
     AuthService,
+    NgbActiveModal,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

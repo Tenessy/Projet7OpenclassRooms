@@ -1,4 +1,4 @@
-<div class="" *ngFor="let user of users">
+<div class="d-flex flex-column align-items-center mt-4" *ngFor="let user of users">
     <div class="card" style="width: 30rem;">
         <div class="card-img" *ngIf="user.imageUrl !== null">
             <img class="card-img" [src]="user.imageUrl">
@@ -27,8 +27,8 @@
                 <h3 class="lora"><strong>Code postale:</strong> {{ user.code_postale }}</h3>
             </li>
         </ul>
-    </div><br>
-    <button class="btn btn-primary" [disabled]="!isAuth()" (click)="editUser()">
+    </div>
+    <button class="btn btn-primary mt-4" [disabled]="!isAuth()" (click)="editUser()">
         <h4 class="lora"><strong>Modifier les informations</strong></h4>
     </button>
 </div>

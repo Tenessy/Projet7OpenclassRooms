@@ -8,8 +8,7 @@ import { Post } from '../models/post.model';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css',
-    '../../../node_modules/bootstrap/dist/css/bootstrap.css']
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
 

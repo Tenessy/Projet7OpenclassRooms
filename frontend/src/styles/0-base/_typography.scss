@@ -1,0 +1,21 @@
+.lora {
+    font-family: "Lora", serif;
+    font-size: 14px;
+    &--gras  {
+        font-weight: bold;
+    }
+}
+.gras {
+    font-weight: bold;
+}
+.position_login {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+}
+div a {
+    text-decoration: none;
+}
+li {
+    text-decoration: none;
+}

@@ -1,50 +1,21 @@
 <app-publier></app-publier>
-
-<h2>Fil d'actualité</h2>
 <section>
-    <div class="container text-center">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-12" *ngFor="let post of posts">
-                <div class="card" style="width: 22rem;">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ post.userName }}</h2>
-                        <h3 style="font-size: 10px;">Publié le {{ post.date | date: 'dd/MM/yyyy' }} à {{ post.date |
-                            date:'HH:mm' }}
-                        </h3>
-                        <p class="card-text" style="font-size: 16px">{{ post.texte }}</p>
-                        <div class="card-image" style="width: 100%">
-                            <img [src]="post.imageUrl" width="320px" alt="Card image cap">
+            <div class="d-flex flex-column align-items-center">
+                <h2>Fil d'actualité</h2>
+                <div class="col-xs-12" *ngFor="let post of posts">
+                    <div class="card m-2 pb-3" style="width: 22rem;">
+                        <app-publication [post]="post"></app-publication>
+                        <div class="d-grid gap-2 col-11 mx-auto mt-0">
+                            <button class="btn btn-primary" [routerLink]="post.postId?.toString()">
+                                <span class="lora">Voir la publication</span>
+                            </button>
                         </div>
-                        <h4 style="font-size: 12px;">{{ post.liked }} j'aimes</h4>
-                        <h4 style="font-size: 12px;">{{ post.commentaires }} commentaires</h4>
-                        <div class="text-center">
-                            <a routerLink="">
-                                <fa-icon [icon]="faThumbsUp"></fa-icon>
-                                J'aime
-                            </a>
-                            <a routerLink="" (click)="goComment(post.postId)">
-                                <fa-icon [icon]="faCommentAlt"></fa-icon>Commenter
-                            </a>
-                            <a href="#">
-                                <fa-icon [icon]="faShare"></fa-icon>Partager
-                            </a>
-                        </div><br>
-                        <form>
-                            <div class="form-group" [hidden]="!isClick">
-                                <label for="commentaire"></label>
-                                <textarea placeholder="écrivez un commentaire" id="commentaire"></textarea><br>
-                                <button class="btn btn-warning">Annuler</button>
-                                <button type="submit" class="btn btn-primary">Poster</button>
-                            </div><br>
-                        </form>
-
-                        <button class="btn btn-primary" [routerLink]="post.postId">
-                            <span class="lora">Voir la publication</span>
-                        </button>
                     </div>
                 </div>
-                <br>
             </div>
         </div>
     </div>
 </section>
+
