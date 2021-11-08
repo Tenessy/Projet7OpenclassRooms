@@ -13,6 +13,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { OnePostCommentComponent } from './one-post-comment/one-post-comment.component';
 
 const appRoutes: Routes = [
+    { path: '', pathMatch: 'full', redirectTo: '/login' },
     { path: 'forum', canActivate: [AuthGuard], component: ForumViewComponent },
     { path: 'forum/:id', canActivate: [AuthGuard], component: OnePostComponent },
     { path: 'forum/:id/comment', canActivate: [AuthGuard], component: OnePostCommentComponent },
@@ -22,7 +23,7 @@ const appRoutes: Routes = [
     { path: 'user/:id/edit', canActivate: [AuthGuard], component: EditUserComponent },
     { path: 'new-user', canActivate: [AuthGuard], component: NewUserComponent },
     { path: 'not-found', component: FourOhFourComponent },
-    { path: '**', redirectTo: '/not-found' }
+    { path: '**', redirectTo: 'not-found' },
 ];
 
 @NgModule({

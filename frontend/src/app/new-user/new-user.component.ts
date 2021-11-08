@@ -16,7 +16,7 @@ import { UserService } from '../services/user.service';
 export class NewUserComponent implements OnInit {
   @Input() infoUsers: any = [];
   userForm: FormGroup;
-  users: any = [];
+  user: any = [];
 
   constructor(private formBuilder: FormBuilder,
     private userSerice: UserService,
@@ -32,8 +32,13 @@ export class NewUserComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
     this.userSerice.getUser(id).subscribe(
       user => {
+        if (user.length === 0 || user.length < 0) {
+          this.router.navigate(['/not-found']);
+        }
+        else {
+          this.user = user;
+        }
         localStorage.setItem('user', JSON.stringify({ user: user[0] }))
-        this.users = user;
         this.infoUsers = user
         console.log(this.infoUsers)
       }

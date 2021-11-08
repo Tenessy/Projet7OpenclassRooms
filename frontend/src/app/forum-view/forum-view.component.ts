@@ -56,49 +56,6 @@ export class ForumViewComponent implements OnInit, OnDestroy {
     );
   }
   
-  onClick($event: any, post: any) {
-    let userId_like;
-    const filterPosta = from(this.likes);
-    const filtera = filterPosta.pipe(filter((like: any) => like.forum_id === post.postId));
-    filtera.subscribe(
-      like => {
-        userId_like = like.userId_like;
-      }
-    );
-    post = {
-      postId: post.postId,
-      userId: this.user.userId
-    }
-    const formData: any = new FormData();
-    formData.append('post', JSON.stringify(post));
-    if (userId_like !== this.user.userId) {
-      post.likeStatus = 0;
-      this.postService.postLikes(formData).subscribe(
-        data => {
-          console.log('Tout est OK' + data);
-          this.ngOnInit();
-        },
-        error => {
-          console.log(error)
-        }
-      );
-      console.log('Ajout OK !');
-    }
-    else {
-      this.postService.deleteUserIdLikes(post)
-        .subscribe(
-          data => {
-            console.log('userId supprimé avec succès !');
-            this.ngOnInit();
-          }
-        );
-      post.likeStatus = 1;
-      console.log('déjà existant !');
-    }
-    $event.preventDefault();
-    $event.stopPropagation();
-  }
-
   ngOnDestroy() {
     this.postSubscription.unsubscribe();
   }

@@ -38,13 +38,13 @@ export class PostService {
     updatePost(data: any) {
         return this.http.put(`${this.apiHost}/forum`, data);
     }
-    postLikes(data: any) {
+    postLike(data: any) {
         return this.http.post(`${this.apiHost}/forum/likes`, data);
     }
     getLikes() {
         return this.http.get(`${this.apiHost}/forum/like/user`);
     }
-    deleteUserIdLikes(post: any) {
+    deleteLike(post: any) {
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

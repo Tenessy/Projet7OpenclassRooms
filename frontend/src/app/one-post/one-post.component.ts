@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { PostService } from '../services/post.service';
 import { faThumbsUp, faCommentAlt } from '@fortawesome/free-regular-svg-icons';
 import { faShare } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../services/auth.service';
 import { FormControl } from '@angular/forms';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-one-post',
@@ -36,21 +38,21 @@ export class OnePostComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userPermission();
-    console.log(this.comment)
     const id = this.route.snapshot.params['id'];
-    this.subscribtion = this.postService.getPost(id).subscribe(
-      posts => {
+    this.subscribtion = this.route.params.pipe(
+      switchMap((params: Params) => this.postService.getPost(+params['id']))
+    ).subscribe(posts => {
+      if (posts.length === 0 || posts.length < 0) {
+        this.router.navigate(['/not-found']);
+      }
+      else {
         this.posts = posts;
-        console.log(this.posts);
-      },
-      error => {
-        console.log(error);
-      });
+      }
+    });
     this.postService.getCommentsOnePost(id).subscribe(
       comments => {
         this.comments = comments;
         console.log(this.comments);
-
       }
     );
   }

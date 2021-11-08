@@ -41,19 +41,19 @@ export class PublicationComponent implements OnInit, OnDestroy {
   like(post: Post) {
     const formData: any = new FormData();
     formData.append('post', JSON.stringify(post));
-    this.postService.postLikes(formData).subscribe(
+    this.postService.postLike(formData).subscribe(
       data => {
         console.log(data);
-        this.ngOnInit()
+        this.ngOnInit();
       }
     );
     post.likeStatus = true;
   }
   unLike(post: Post) {
-    this.postService.deleteUserIdLikes(post).subscribe(
+    this.postService.deleteLike(post).subscribe(
       data => {
         console.log(data);
-        this.ngOnInit()
+        this.ngOnInit();
       }
     );
     post.likeStatus = false;

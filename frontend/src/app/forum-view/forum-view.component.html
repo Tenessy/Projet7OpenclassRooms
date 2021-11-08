@@ -8,7 +8,7 @@
                     <div class="card m-2 pb-3" style="width: 22rem;">
                         <app-publication [post]="post"></app-publication>
                         <div class="d-grid gap-2 col-11 mx-auto mt-0">
-                            <button class="btn btn-primary" [routerLink]="post.postId?.toString()">
+                            <button class="btn btn-primary" [routerLink]="['/forum', post.postId?.toString()]">
                                 <span class="lora">Voir la publication</span>
                             </button>
                         </div>
@@ -18,4 +18,3 @@
         </div>
     </div>
 </section>
-

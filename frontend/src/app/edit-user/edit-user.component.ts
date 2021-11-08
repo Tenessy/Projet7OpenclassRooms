@@ -71,9 +71,6 @@ export class EditUserComponent implements OnInit {
         data => {
           this.router.navigate([`/user/${id}`]);
           console.log(data);
-        },
-        error => {
-          console.log(error);
         }
       );
   }
