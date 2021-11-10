@@ -136,16 +136,17 @@ exports.getInfoUser = (req, res, next) => {
 }
 
 exports.postOneComment = (req, res, next) => {
-    const post = JSON.parse(req.body.comment);
-    const comment = post.commentaire;
-    const date = post.date;
+    const comment = JSON.parse(req.body.comment);
+    const commentaire = comment.commentaire;
+    const date = comment.date;
+    const commentId = comment.comment_id;
     const user = JSON.parse(req.body.user);
     const imageUrl = user.imageUrl;
     const userName = user.firstName;
     const userId = user.userId;
     console.log(user);
-    db.query('INSERT INTO commentaires (commentaire, userId, imageUrl, userName, commentDate, postId) VALUES (?,?,?,?,?,?)',
-        [comment, userId, imageUrl, userName, date, req.params.id],
+    db.query('INSERT INTO commentaires (commentaire, userId, imageUrl, userName, commentDate, comment_id, postId) VALUES (?,?,?,?,?,?,?)',
+        [commentaire, userId, imageUrl, userName, date, commentId, req.params.id],
         (err, data, field) => {
             if (err) {
                 console.log(err)
@@ -158,7 +159,7 @@ exports.postOneComment = (req, res, next) => {
 }
 
 exports.getCommentsOnePost = (req, res, next) => {
-    db.query('SELECT commentaire, imageUrl, userName, userId, commentDate FROM commentaires WHERE postId = ? ORDER BY commentDate DESC', [req.params.id],
+    db.query('SELECT commentaire, imageUrl, userName, userId, commentDate, comment_id FROM commentaires WHERE postId = ? ORDER BY commentDate DESC', [req.params.id],
         (err, data, field) => {
             if (err) {
                 console.log(err)
@@ -221,7 +222,19 @@ exports.deleteUserIdLikes = (req, res, next) => {
             }
         });
 }
-
+exports.deleteOneComment = (req, res, next) => {
+    const comment = JSON.parse(req.body.comment);
+    const commentId = comment.comment_id;
+    db.query('DELETE FROM commentaires WHERE postId = ? AND comment_id = ?', [req.params.id, commentId], (err, data, field) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({ message: err })
+        }
+        else {
+            res.status(200).json({ message: 'Suppresion du commentaire avec succès' });
+        }
+    })
+}
 exports.modifyOnePost = (req, res, next) => {
 
 }

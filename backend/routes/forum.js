@@ -14,12 +14,10 @@ router.delete('/:id', auth, controllers.deleteOnePost);
 router.put('/:id', auth, controllers.modifyOnePost);
 router.get('/:id/comment', auth, controllers.getCommentsOnePost);
 router.post('/:id/comment', auth, multer, controllers.postOneComment);
+router.delete('/:id/comment', auth, multer, controllers.deleteOneComment);
 
 router.get('/like/user', auth, controllers.getlikes);
 router.delete('/like/user', auth, multer, controllers.deleteUserIdLikes);
 router.post('/likes', auth, multer, controllers.postLikes);
-
-
-
 
 module.exports = router;
