@@ -1,5 +1,6 @@
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,7 +32,6 @@ import { OnePostCommentComponent } from './one-post-comment/one-post-comment.com
 import { PublicationComponent } from './publication/publication.component';
 import { TestComponent } from './test/test.component';
 import { NgbdModalConfirm, NgbdModalFocus, NgbdModalConfirmAutofocus } from './confirmation-dialog/confirmation-dialog.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*!
- * Bootstrap v5.1.2 (https://getbootstrap.com/)
+ * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
@@ -2988,7 +2988,6 @@ textarea.form-control-lg {
 
 .btn {
   display: inline-block;
-  align-self: center;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
@@ -11294,6 +11293,12 @@ textarea.form-control-lg {
   font-weight: bold;
 }
 
+.position_login {
+  position: relative;
+  display: inline-block;
+  z-index: 2;
+}
+
 div a {
   text-decoration: none;
 }
@@ -11339,4 +11344,80 @@ li {
   display: flex !important;
   justify-content: center !important;
   width: 100% !important;
+}
+
+.container_new {
+  margin-top: -45px;
+  position: relative;
+  background-color: white;
+  display: inline-block;
+  width: 150px;
+}
+
+.container_new-center {
+  margin-top: -14px;
+}
+
+/*.fasThumbsUp {
+    &__anim {
+        &:active {
+            transform: rotate(0deg) scale(1);
+            animation-name: anim-like;
+            animation-duration: 800ms;
+            // transition: transform 800ms ease-in-out;
+        }
+        // transform: rotate(15deg);
+    }
+}*/
+@-webkit-keyframes anim-like {
+  0% {
+    transform: rotate(20deg) scale(1.5);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+@keyframes anim-like {
+  0% {
+    transform: rotate(20deg) scale(1.5);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+.group_like:hover + div {
+  transform: rotate(0deg) scale(1);
+  -webkit-animation: anim-like 800ms 300ms;
+          animation: anim-like 800ms 300ms;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+.like {
+  cursor: pointer;
+  font-size: 20px;
+}
+.like--color {
+  color: #1edf88;
+}
+.like__click:active + div {
+  transform: rotate(0deg) scale(1);
+  -webkit-animation: anim-like 800ms 300ms;
+          animation: anim-like 800ms 300ms;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+.like__click:active + div:hover + div {
+  transform: rotate(0deg) scale(1);
+  -webkit-animation: anim-like 800ms 300ms;
+          animation: anim-like 800ms 300ms;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+.like--hover-color:hover {
+  color: #1edf88;
+}
+.like__transform {
+  transform: rotate(45deg);
+  transition: transform 500ms ease-in-out;
 }/*# sourceMappingURL=styles.css.map */

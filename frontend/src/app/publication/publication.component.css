@@ -7,12 +7,6 @@ div a {
     font-size: 18px;
     font-weight: bold;
 }
-.ng-fa-icon.hover-color:hover {
-    color: #1edf88;
-}
-.ng-fa-icon.color {
-    color: #1edf88;
-}
 
 img {
     height: auto;

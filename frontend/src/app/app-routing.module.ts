@@ -28,7 +28,9 @@ const appRoutes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(appRoutes)
+        RouterModule.forRoot(appRoutes, {
+            anchorScrolling: 'enabled'
+        })
     ],
     exports: [
         RouterModule

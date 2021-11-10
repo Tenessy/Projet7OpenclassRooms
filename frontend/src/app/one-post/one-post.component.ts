@@ -8,6 +8,7 @@ import { faShare } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../services/auth.service';
 import { FormControl } from '@angular/forms';
 import { Post } from '../models/post.model';
+import { comment } from 'postcss';
 
 @Component({
   selector: 'app-one-post',
@@ -64,6 +65,7 @@ export class OnePostComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   postComment() {
     console.log(JSON.stringify(this.comment.value));
     const id = this.route.snapshot.params['id'];
@@ -74,7 +76,11 @@ export class OnePostComponent implements OnInit, OnDestroy {
         console.log(user);
       }
     );
+    let min = 100000;
+    let max = 1000000
+    const comment_id = Math.floor(Math.random() * (max - min)) + min;
     const comment = {
+      comment_id: comment_id,
       commentaire: this.comment.value,
       date: Date.now(),
     }
@@ -96,7 +102,21 @@ export class OnePostComponent implements OnInit, OnDestroy {
     else {
       console.log('La requête n\'a pas pu aboutir, veuillez remplir le champs');
     }
-
+  }
+  commentaire: any;
+  deleteComment(comment: any) {
+    this.commentaire = comment;
+  }
+  confirmDeleteComment() {
+    const id = this.route.snapshot.params['id'];
+    const commentaire = JSON.stringify(this.commentaire);
+    this.postService.deleteComment(commentaire, id)
+      .subscribe(
+        val => {
+          console.log(val + 'le commentaire a été supprimé')
+        }
+      );
+    this.ngOnInit();
   }
 
   viewUser(id: any) {

@@ -53,5 +53,14 @@ export class PostService {
         };
         return this.http.delete(`${this.apiHost}/forum/like/user`, options);
     }
+    deleteComment(comment: any, id: any) {
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+            body: { comment: comment }
+        };
+        return this.http.delete(`${this.apiHost}/forum/${id}/comment`, options);
+    }
 
 }

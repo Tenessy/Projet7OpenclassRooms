@@ -1,0 +1,55 @@
+/*.fasThumbsUp {
+    &__anim {
+        &:active {
+            transform: rotate(0deg) scale(1);
+            animation-name: anim-like;
+            animation-duration: 800ms;
+            // transition: transform 800ms ease-in-out;
+        }
+        // transform: rotate(15deg);
+    }
+}*/
+@keyframes anim-like {
+    0% {
+        transform: rotate(20deg) scale(1.5);
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
+.group_like {
+    &:hover + div {
+        transform: rotate(0deg) scale(1);
+        animation: anim-like 800ms 300ms;
+        animation-fill-mode: both;
+    }
+}
+.like {
+    cursor: pointer;
+    font-size: 20px;
+    &--color {
+        color: #1edf88;
+    }
+    &__click {
+        &:active + div {
+            transform: rotate(0deg) scale(1);
+            animation: anim-like 800ms 300ms;
+            animation-fill-mode: both;
+            &:hover + div {
+                transform: rotate(0deg) scale(1);
+                animation: anim-like 800ms 300ms;
+                animation-fill-mode: both;
+            }
+        }
+    }
+
+    &--hover-color {
+        &:hover {
+            color: #1edf88;
+        }
+    }
+    &__transform {
+        transform: rotate(45deg);
+        transition: transform 500ms ease-in-out;
+    }
+}

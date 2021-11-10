@@ -10,18 +10,23 @@
 </div>
 <div class="card-body">
     <div class="text-center d-flex flex-row justify-content-center">
-        <div class="col-4">
-            <fa-icon (click)="like(post)" class="hover-color" *ngIf="!post.likeStatus" [icon]="farThumbsUp"
-                style="font-size: 20px;">
-            </fa-icon>
-            <fa-icon (click)="unLike(post)" class="color" *ngIf="post.likeStatus" [icon]="fasThumbsUp"
-                style="font-size: 20px;">
-            </fa-icon>
-            <span class="lora gras"> {{ post.nbrLikes }} </span>
+        <div class="d-flex flex-row justify-content-center col-4">
+            <div>
+                <fa-icon (click)="like(post)" class="like like--hover-color" [icon]="farThumbsUp"
+                    *ngIf="!post.likeStatus">
+                </fa-icon>
+            </div>
+            <div *ngIf="post.likeStatus" [@fadeInOut]>
+                <fa-icon (click)="unLike(post)" class="like like--color" [icon]="fasThumbsUp">
+                </fa-icon>
+            </div>
+            <div class="ms-2">
+                <span class="lora gras"> {{ post.nbrLikes }} </span>
+            </div>
         </div>
         <div class="col-4">
-            <a routerLink="" (click)="goComment(post.postId)">
-                <fa-icon class="hover-color"[icon]="faCommentAlt" style="font-size: 20px;"></fa-icon>
+            <a [routerLink]="['/forum/', post.postId]" fragment="comment">
+                <fa-icon class="hover-color" [icon]="faCommentAlt" style="font-size: 20px;"></fa-icon>
             </a>
             <span class="lora gras"> {{ post.nbrCommentaires }} </span>
         </div>

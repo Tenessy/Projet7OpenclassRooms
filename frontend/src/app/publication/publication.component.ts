@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { PostService } from '../services/post.service';
+import { style, state, animate, transition, trigger, keyframes } from '@angular/animations';
 import { faThumbsUp as farThumbsUp, faCommentAlt } from '@fortawesome/free-regular-svg-icons'
 import { faShare, faThumbsUp as fasThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { Observable, Subscription, from, pipe, of, fromEvent } from 'rxjs';
@@ -12,9 +13,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-publication',
   templateUrl: './publication.component.html',
-  styleUrls: ['./publication.component.css']
+  styleUrls: ['./publication.component.css'],
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ transform: 'rotate(10deg) scale(1.5)' }),
+        animate('200ms ease', style({ opacity: 1 }))
+      ])
+    ])
+  ]
 })
+
 export class PublicationComponent implements OnInit, OnDestroy {
+
 
   constructor(private postService: PostService,
     private auth: AuthService,
@@ -34,7 +45,7 @@ export class PublicationComponent implements OnInit, OnDestroy {
   likeSubscription: Subscription;
 
   goComment(id: any) {
-    let link = [`/forum/${id}/comment`];
+    let link = [`/forum/${id}/#comment`];
     console.log(id);
     this.router.navigate(link);
   }
