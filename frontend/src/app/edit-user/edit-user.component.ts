@@ -97,7 +97,8 @@ export class EditUserComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
     this.userService.deleteOneUser(id).subscribe(
       val => {
-        console.log('Le compte  bien été supprimer' + val)
+        console.log('Le compte  bien été supprimer' + val);
+        this.router.navigate(['/login']);
       },
       err => {
         console.log(err)

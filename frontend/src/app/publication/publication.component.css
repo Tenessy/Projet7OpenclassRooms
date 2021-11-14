@@ -7,8 +7,19 @@ div a {
     font-size: 18px;
     font-weight: bold;
 }
+.publication_header {
+    background-color: #323433;
+    color: white;
+    height: 120px;
+}
 
 img {
     height: auto;
     width: 100%;
+}
+.avatar {
+    clip-path: ellipse(25px 25px);
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
 }

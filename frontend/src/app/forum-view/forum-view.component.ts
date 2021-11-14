@@ -35,27 +35,31 @@ export class ForumViewComponent implements OnInit, OnDestroy {
   postSubscription: Subscription;
   likes: any;
   user: any;
+  today: Number = Date.now();
 
   goComment(id: any) {
     let link = [`/forum/${id}/comment`];
     console.log(id);
     this.router.navigate(link);
   }
+  deletePost(post: any) {
+    console.log(post);
+  }
   ngOnInit() {
     this.postSubscription = this.postService.getPostsFromServer()
       .subscribe(
         posts => {
+          console.log(posts);
           this.posts = posts;
         }
       );
     this.auth.subject.subscribe(
       user => {
         this.user = user;
-        console.log(user);
       }
     );
   }
-  
+
   ngOnDestroy() {
     this.postSubscription.unsubscribe();
   }

@@ -15,7 +15,6 @@ import { LoginComponent } from './login/login.component';
 
 import { PostService } from './services/post.service';
 import { registerLocaleData } from '@angular/common';
-import { AuthComponent } from './auth/auth.component';
 import { ForumViewComponent } from './forum-view/forum-view.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthService } from './services/auth.service';
@@ -31,13 +30,12 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { OnePostCommentComponent } from './one-post-comment/one-post-comment.component';
 import { PublicationComponent } from './publication/publication.component';
 import { TestComponent } from './test/test.component';
-import { NgbdModalConfirm, NgbdModalFocus, NgbdModalConfirmAutofocus } from './confirmation-dialog/confirmation-dialog.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    AuthComponent,
     ForumViewComponent,
     OnePostComponent,
     PublierComponent,
@@ -48,11 +46,8 @@ import { NgbdModalConfirm, NgbdModalFocus, NgbdModalConfirmAutofocus } from './c
     OnePostCommentComponent,
     PublicationComponent,
     TestComponent,
-    NgbdModalConfirm,
-    NgbdModalFocus,
-    NgbdModalConfirmAutofocus
+
   ],
-  entryComponents: [NgbdModalConfirm, NgbdModalFocus, NgbdModalConfirmAutofocus],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -19,10 +19,10 @@
             <section id="comment">
                 <div class="d-flex flex-row col mt-4" *ngFor="let comment of comments">
                     <div class="card-image position">
-                        <img [src]="comment.imageUrl" class="avatar">
+                        <img [src]="comment.userImageUrl" class="avatar">
                     </div>
                     <h3 class="lora gras">
-                        <a routerLink="" (click)="viewUser(comment.userId)">{{ comment.userName }}</a>
+                        <a routerLink="" (click)="viewUser(comment.userId)">{{ comment.firstName }}</a>
                     </h3>
                     <h4 class="lora heure" *ngIf="today - comment.commentDate <= 60000">{{ today -
                         comment.commentDate |

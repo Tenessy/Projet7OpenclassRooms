@@ -30,7 +30,7 @@ export class OnePostComponent implements OnInit, OnDestroy {
   comments: any = [];
   commentHeure: any;
 
-  today: number = Date.now();
+  today: any = Date.now();
 
   constructor(private postService: PostService,
     private route: ActivatedRoute,
@@ -87,7 +87,6 @@ export class OnePostComponent implements OnInit, OnDestroy {
     const formData: any = new FormData();
     formData.append('comment', JSON.stringify(comment))
     formData.append('user', JSON.stringify(user));
-
     if (this.comment.value !== "" && formData !== null) {
       this.postService.postOnePostComment(id, formData).subscribe(
         val => {

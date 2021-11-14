@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, Router, UrlTree, UrlSegment } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthService } from "./auth.service";
+import jwtDecode from "jwt-decode";
+
 
 
 @Injectable({ providedIn: 'root' })
@@ -12,8 +14,15 @@ export class AuthGuard implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean> | Promise<boolean> | boolean {
-        console.log(this.authService.userToken);
-        if (this.authService.userToken) {
+        const decoded = this.authService.authToken();
+        const tokenUserId = decoded.user.userId;
+        let currentUserId;
+        this.authService.subject.subscribe(
+            val => {
+                currentUserId = val?.userId;
+            }
+        );
+        if (tokenUserId === currentUserId) {
             return true;
         }
         else {

@@ -42,24 +42,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   get f() { return this.loginForm.controls; }
 
   onSubmitForm() {
-    const formUser = this.loginForm.value; 
+    const formUser = this.loginForm.value;
     const email = formUser.email;
     const password = formUser.password;
     this.subscription = this.userService.login(email, password)
-      .subscribe(
-        result => {
+      .subscribe({
+        next: result => {
           this.authService.signIn(result);
-          console.log(result);
           this.router.navigateByUrl('/forum');
         },
-        error => {
+        error: error => {
           console.log('Une erreur est survenue lors de la connexion !' + error, email, formUser);
-
-        });
+        }
+      });
   }
   onSignOut() {
     this.authService.signOut();
-    this.authStatus = this.authService.isAuth;
   }
 
   ngOnDestroy() {

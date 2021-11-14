@@ -1,17 +1,18 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
     <div class="d-flex flex-column align-items-center">
         <div class="form-group" *ngFor="let editUser of user">
-            <div class="card-img">
-                <img [src]="editUser.imageUrl">
+            <div class="card-image text-center">
+                <img [src]="editUser.userImageUrl">
             </div>
-            <label for="firstName" class="lora">Prénom</label>
-            <input type="text" class="form-control" id="firstName" value="editUser.firstName"
-                [(ngModel)]="editUser.firstName" formControlName="firstName" name="firstName">
-
             <div class="form-group">
                 <label for="lastName" class="lora">Nom</label>
                 <input type="text" class="form-control" id="lastName" [(ngModel)]="editUser.lastName"
                     formControlName="lastName" value="editUser.lastName">
+            </div>
+            <div class="form-group">
+                <label for="firstName" class="lora">Prénom</label>
+                <input type="text" class="form-control" id="firstName" value="editUser.firstName"
+                    [(ngModel)]="editUser.firstName" formControlName="firstName" name="firstName">
             </div>
             <div class="form-group">
                 <label for="date_de_naissance" class="lora">Date de naissance</label>
@@ -61,7 +62,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary" (click)="deleteUser()">Supprimer</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteUser()">Supprimer</button>
             </div>
         </div>
     </div>

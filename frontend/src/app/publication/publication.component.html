@@ -1,11 +1,29 @@
-<div class="card-body" *ngIf="post">
-    <h2 class="card-title">{{ post.userName }}</h2>
-    <h3 style="font-size: 10px;">Publié le {{ post.date | date: 'dd/MM/yyyy' }} à {{ post.date |
-        date:'HH:mm' }}
-    </h3>
+<div class="card-body publication_header" *ngIf="post">
+    <div class="d-flex flex-row">
+        <div class="col-4" style="margin-left: -20px; margin-top: -20px;" *ngIf="post.userImageUrl !== null">
+            <img class="avatar" [src]="post.userImageUrl">
+        </div>
+        <div class="d-flex flex-column mt-n4">
+            <div class="col mt-2">
+                <h2 class="card-title" style="font-size: 16px; margin-top: -5px;">{{ post.firstName }}</h2>
+            </div>
+            <div class="col mt-n4" style="margin-top: -15px;">
+                <h3 style="font-size: 10px;" *ngIf="today - post.date <= 60000">il y a {{ today -
+                    post.date | date:'s':'+0000' }} sec </h3>
+                <h3 style="font-size: 10px;" *ngIf="today - post.date >= 60000 && today - post.date < 3600000">
+                    il y a {{ today - post.date | date: 'm':'+0000' }} min </h3>
+                <h3 style="font-size: 10px;" *ngIf="today - post.date >= 3600000 && today - post.date < 86400000">
+                    il y a {{ today - post.date | date:
+                    'H':'+0000'}} h </h3>
+                <h3 style="font-size: 10px;" *ngIf="today - post.date >= 86400000">il y a {{ today -
+                    post.date | date:
+                    'd':'+0000' }} j </h3>
+            </div>
+        </div>
+    </div>
     <p class="card-text" style="font-size: 16px">{{ post.texte }}</p>
 </div>
-<div class="card-image">
+<div class="card-image" *ngIf="post.imageUrl !== null">
     <img [src]="post.imageUrl" alt="Card image cap">
 </div>
 <div class="card-body">
@@ -28,7 +46,7 @@
             <a [routerLink]="['/forum/', post.postId]" fragment="comment">
                 <fa-icon class="hover-color" [icon]="faCommentAlt" style="font-size: 20px;"></fa-icon>
             </a>
-            <span class="lora gras"> {{ post.nbrCommentaires }} </span>
+            <span class="lora gras" style="margin-top: -10px;"> {{ post.nbrCommentaires }} </span>
         </div>
         <div class="col-4">
             <a href="#">

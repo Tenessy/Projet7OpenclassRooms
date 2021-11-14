@@ -17,11 +17,9 @@ export class PostService {
     getPost(id: number): Observable<Post[]> {
         return this.http.get<Post[]>(`${this.apiHost}/forum/${id}`);
     }
-
     getPostsFromServer() {
         return this.http.get<any[]>(`${this.apiHost}/forum`);
     }
-
     newPost(data: any) {
         const apiUrl = `${this.apiHost}/forum`;
         return this.http.post<any>(apiUrl, data, {

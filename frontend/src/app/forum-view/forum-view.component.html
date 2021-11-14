@@ -3,13 +3,17 @@
     <div class="container">
         <div class="row">
             <div class="d-flex flex-column align-items-center">
-                <h2>Fil d'actualité</h2>
+                <h2 class="mt-4">Fil d'actualité</h2>
                 <div class="col-xs-12" *ngFor="let post of posts">
                     <div class="card m-2 pb-3" style="width: 22rem;">
                         <app-publication [post]="post"></app-publication>
                         <div class="d-grid gap-2 col-11 mx-auto mt-0">
                             <button class="btn btn-primary" [routerLink]="['/forum', post.postId?.toString()]">
                                 <span class="lora">Voir la publication</span>
+                            </button>
+                            <button class="btn btn btn-danger" *ngIf="post.userId === user.userId"
+                                (click)="deletePost(post)">
+                                <span class="lora">Supprimer la publication</span>
                             </button>
                         </div>
                     </div>

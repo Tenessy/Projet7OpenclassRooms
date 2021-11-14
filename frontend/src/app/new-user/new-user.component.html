@@ -1,17 +1,17 @@
 <div class="d-flex flex-column align-items-center mt-4" *ngFor="let AnUser of user">
     <div class="card" style="width: 30rem;">
         <div class="card-img" *ngIf="user.imageUrl !== null">
-            <img class="card-img" [src]="AnUser.imageUrl">
+            <img class="card-img" [src]="AnUser.userImageUrl">
         </div>
         <div class="card-header bg-info text-center" style="height: 80px;">
             <h2 class="lora"><strong>Vos Informations</strong></h2>
         </div>
         <ul class="list-group list-group-flush list-group-info">
             <li class="list-group-item">
-                <h3 class="lora"><strong>Prénom:</strong> {{ AnUser.firstName }}</h3>
+                <h3 class="lora"><strong>Nom:</strong> {{ AnUser.lastName }}</h3>
             </li>
             <li class="list-group-item">
-                <h3 class="lora"><strong>Nom:</strong> {{ AnUser.lastName }}</h3>
+                <h3 class="lora"><strong>Prénom:</strong> {{ AnUser.firstName }}</h3>
             </li>
             <li class="list-group-item">
                 <h3 class="lora"><strong>Date de naissance:</strong> {{ AnUser.date_de_naissance | date: 'dd/MM/yyyy' }}

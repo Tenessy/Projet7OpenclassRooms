@@ -9,6 +9,7 @@ export class User {
         public adresse?: string,
         public cp?: string,
         public telephone?: string,
-        public token?: string) { }
+        public token?: string,
+        public imageUrl?: string) { }
 }
 

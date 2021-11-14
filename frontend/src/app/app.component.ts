@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscritpion.unsubscribe();
   }
   viewUser() {
-    const user: any = localStorage.getItem('user');
+    const user: any = localStorage.getItem('currentUser');
     const id = JSON.parse(user).user.userId;
     const link = ['/user/', id];
     this.router.navigate(link);
