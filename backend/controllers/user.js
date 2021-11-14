@@ -3,145 +3,120 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
-exports.registerUser = (req, res, next) => {
+exports.registerUser = (req, res) => {
     const email = req.body.email;
-    db.query('SELECT email FROM user WHERE email = ?', [email], (error, data, field) => {
+    db.query('SELECT email FROM user WHERE email = ?', [email], (error, data) => {
+        if (error) {
+            return res.status(500).json({ message: error.message })
+        }
         if (data.length > 0) {
             return res.status(400).json({ message: 'L\'addresse email existe déjà dans la bdd !' })
         }
-        else if (data.length === 0) {
-            bcrypt.hash(req.body.password, 10)
-                .then(hash => {
-                    db.query('INSERT INTO user (firstName, lastName, email, password, userId) VALUES (?,?,?,?,?)',
-                        [req.body.firstName, req.body.lastName, req.body.email, hash, req.body.userId],
-                        (error, data, field) => {
-                            if (error) {
-                                console.log(error);
-                                res.status(400).json({ message: error });
-                            }
-                            else {
-                                res.status(201).json({ message: 'L\'utilisateur a bien été enregistré dans la bdd !' });
-                            }
+        bcrypt.hash(req.body.password, 10)
+            .then(hash => {
+                db.query('INSERT INTO user (firstName, lastName, email, password, userId) VALUES (?,?,?,?,?)',
+                    [req.body.firstName, req.body.lastName, req.body.email, hash, req.body.userId],
+                    (error) => {
+                        if (error) {
+                            console.log(error);
+                            return res.status(400).json({ message: error.message });
                         }
-                    );
-                })
-                .catch(error => res.status(500).json({ message: error }));
-        }
+                        res.status(201).json({ message: 'L\'utilisateur a bien été enregistré dans la bdd !' });
+                    }
+                );
+            })
+            .catch(error => res.status(500).json({ message: error.message }));
     });
-
 }
 
-exports.loginUser = (req, res, next) => {
-
+exports.loginUser = (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    db.query('SELECT id,password FROM user WHERE email = ?', [email], (error, data, field) => {
+    db.query('SELECT userId, password, firstName, lastName, userImageUrl FROM user WHERE email = ?', [email], (error, data) => {
         if (error) {
-            return console.log(error);
+            return res.status(400).json({ message: error.message });
         }
-        else {
-            bcrypt.compare(password, data[0].password)
-                .then(valid => {
-                    if (!valid) {
-                        return res.status(401).json({ message: 'Le mot de passe saisie ne correspond pas' });
-                    }
-                    const token = jwt.sign(
-                        { user_id: data[0].id },
-                        '123321190289023',
-                        { expiresIn: '24h' }
-                    );
-                    db.query('SELECT userId,firstName,lastName,imageUrl FROM user WHERE email = ?', [email], (error, data, field) => {
-                        if (error) {
-                            console.log(error)
-                        }
-                        else {
-                            console.log(data)
-                            res.status(200).json({ access_token: token, data: data })
-                        }
-                    })
-                    //res.status(200).json({ access_token: token })
-                })
-                .catch(error => res.status(500).json({ message: error }))
-        }
-
+        const user = data[0];
+        bcrypt.compare(password, user.password)
+            .then(valid => {
+                if (!valid) {
+                    return res.status(401).json({ message: 'Le mot de passe saisie ne correspond pas' });
+                }
+                const token = jwt.sign(
+                    { user: user },
+                    '123321190289023',
+                    { expiresIn: '24h' }
+                );
+                res.status(200).json({ access_token: token })
+            })
+            .catch(error => res.status(500).json({ message: error.message }))
     });
 }
-
 
 exports.getUsers = (req, res, next) => {
     console.log(req.params);
-    db.query('SELECT firstName, email, userId, lastName, code_postale, adresse, date_de_naissance, telephone, imageUrl FROM user WHERE userId = ?', [req.params.id], (error, data, field) => {
+    db.query('SELECT firstName, email, userId, lastName, code_postale, adresse, date_de_naissance, telephone, userImageUrl FROM user WHERE userId = ?', [req.params.id], (error, data) => {
         if (error) {
             console.log(error);
-            res.status(400).json({ message: error });
+            return res.status(500).json({ message: error.message });
         }
-        else {
-            console.log(data)
-            res.status(200).json(data);
-        }
+        console.log(data)
+        res.status(200).json(data);
     });
 }
-exports.editUser = (req, res, next) => {
-    const user = JSON.parse(req.body.userEdit);
-    let image;
-    db.query('SELECT imageUrl FROM user WHERE userId = ?', [req.params.id], (err, data, field) => {
+exports.editUser = (req, res) => {
+    db.query('SELECT userImageUrl FROM user WHERE userId = ?', [req.params.id], (err, data) => {
         if (err) {
             console.log(err);
-            res.status(400).json({ err })
+            return res.status(500).json({ message: err.message })
         }
-        else if (req.file) {
-            const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-            image = imageUrl;
-            if (data[0].imageUrl !== null) {
-                const imageDelete = data[0].imageUrl.split('/images')[1];
-                fs.unlink(`images/${imageDelete}`, () => {
-                    console.log('Image supprimé avec succès')
-                });
-            }
+        const user = JSON.parse(req.body.userEdit);
+        const lastName = user.lastName ? user.lastName : null;
+        const firstName = user.firstName ? user.firstName : null;
+        const adresse = user.adresse ? user.adresse : null;
+        const cp = user.cp ? user.cp : null;
+        const telephone = user.telephone ? user.telephone : null;
+        const date_de_naissance = user.date_de_naissance ? user.date_de_naissance : null;
+        const currentImageUrl = data[0].userImageUrl;
+        const updateImageUrl = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : currentImageUrl;
+        if (req.file && currentImageUrl !== null) {
+            const imageDelete = currentImageUrl.split('/images')[1];
+            fs.unlink(`images/${imageDelete}`, () => {
+                console.log('Image supprimé avec succès')
+            });
         }
-        else {
-            image = data[0].imageUrl;
-        }
-        db.query('UPDATE user SET lastName = ?, firstName = ?, adresse = ?, code_postale = ?, telephone = ?, date_de_naissance = ?, imageUrl = ? WHERE userId = ?',
-            [user.lastName, user.firstName, user.adresse, user.cp, user.telephone, user.date_de_naissance, image, req.params.id],
-            (err, data, field) => {
+        db.query('UPDATE user SET lastName = ?, firstName = ?, adresse = ?, code_postale = ?, telephone = ?, date_de_naissance = ?, userImageUrl = ? WHERE userId = ?',
+            [lastName, firstName, adresse, cp, telephone, date_de_naissance, updateImageUrl, req.params.id],
+            (err) => {
                 if (err) {
                     console.log(err);
-                    res.status(400).json({ err })
+                    return res.status(400).json({ message: err.message })
                 }
-                else {
-                    console.log('Tout est OK');
-                    res.status(200).json({ message: 'Modification de l\'user Ok' })
-                }
+                console.log('Tout est OK');
+                res.status(200).json({ message: 'Modification de l\'user Ok' })
             });
-
     });
 }
-
-exports.getInfoUser = (req, res, next) => {
-    db.query('SELECT firstName, userId, lastName, code_postale, adresse, date_de_naissance, telephone, imageUrl FROM user WHERE userId = ?'
-        , [req.params.id], (err, data, field) => {
+exports.getInfoUser = (req, res) => {
+    db.query('SELECT firstName, userId, lastName, code_postale, adresse, date_de_naissance, telephone, userImageUrl FROM user WHERE userId = ?'
+        , [req.params.id], (err, data) => {
             if (err) {
                 console.log(err)
-                res.status(400).json({ message: err })
+                return res.status(500).json({ message: err.message })
             }
-            else {
-                console.log(data);
-                res.status(200).json(data);
-            }
-        })
+            console.log(data);
+            res.status(200).json(data);
+        });
 }
 
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res) => {
     console.log(req.params.id);
-    db.query('DELETE FROM user WHERE userId = ?', [req.params.id],
-        (err, data, field) => {
+    db.query('DELETE user,commentaires FROM user INNER JOIN commentaires ON user.userId = commentaires.userId WHERE user.userId = ?', [req.params.id],
+        (err) => {
             if (err) {
                 console.log(err);
-                res.status(400).json({ message: err })
+                return res.status(400).json({ message: err.message })
             }
-            else {
-                res.status(200).json({ message: 'Votre compte a été supprimer avec succès !' })
-            }
-        })
+            res.status(200).json({ message: 'Votre compte a été supprimer avec succès !' })
+        });
 }

@@ -4,17 +4,18 @@ const db = require('../db');
 
 module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
+    console.log(token);
     if (!token) {
-        res.status(401).json({ message: 'Veuillez vous authentifiez !' })
+        return res.status(401).json({ message: 'Veuillez vous authentifiez !' })
     }
     try {
         const decoded = jwt.verify(token, '123321190289023');
-        const userId = decoded.user_id;
-        db.query('SELECT id from user WHERE id = ?', [userId], (err, data, field) => {
+        const decodedUserId = decoded.user.userId;
+        db.query('SELECT userId from user WHERE userId = ?', [decodedUserId], (err, data, field) => {
             if (err) {
-                return console.log(err)
+                return res.status(500).json({ message: error.message })
             }
-            else if (data[0].id !== userId) {
+            else if (data[0].userId !== decodedUserId) {
                 throw 'l\'userId est non valable !'
             }
             else {
