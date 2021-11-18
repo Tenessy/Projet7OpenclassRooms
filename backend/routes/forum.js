@@ -7,11 +7,11 @@ const multer = require('../middleware/multer-config');
 
 router.get('/', auth, controllers.getAllPosts);
 router.post('/', auth, multer, controllers.createPost);
-router.put('/', auth, multer, controllers.updateOnePost);
+router.delete('/', auth, controllers.deletePost);
+router.get('/comment', auth, controllers.getAllComments);
 router.get('/:id', auth, controllers.getOnePost);
-router.delete('/:id', auth, controllers.deleteOnePost);
-
 router.put('/:id', auth, controllers.modifyOnePost);
+
 router.get('/:id/comment', auth, controllers.getCommentsOnePost);
 router.post('/:id/comment', auth, multer, controllers.postOneComment);
 router.delete('/:id/comment', auth, multer, controllers.deleteOneComment);

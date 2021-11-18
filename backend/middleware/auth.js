@@ -1,4 +1,3 @@
-const { json } = require('body-parser');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 
@@ -10,12 +9,12 @@ module.exports = (req, res, next) => {
     }
     try {
         const decoded = jwt.verify(token, '123321190289023');
-        const decodedUserId = decoded.user.userId;
-        db.query('SELECT userId from user WHERE userId = ?', [decodedUserId], (err, data, field) => {
+        const decodedUserId = decoded.id;
+        db.query('SELECT id from user WHERE id = ?', [decodedUserId], (err, data) => {
             if (err) {
-                return res.status(500).json({ message: error.message })
+                return res.status(500).json({ message: err.message })
             }
-            else if (data[0].userId !== decodedUserId) {
+            else if (data[0].id !== decodedUserId) {
                 throw 'l\'userId est non valable !'
             }
             else {

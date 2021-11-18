@@ -14,8 +14,8 @@ exports.registerUser = (req, res) => {
         }
         bcrypt.hash(req.body.password, 10)
             .then(hash => {
-                db.query('INSERT INTO user (firstName, lastName, email, password, userId) VALUES (?,?,?,?,?)',
-                    [req.body.firstName, req.body.lastName, req.body.email, hash, req.body.userId],
+                db.query('INSERT INTO user (firstName, lastName, email, password) VALUES (?,?,?,?)',
+                    [req.body.firstName, req.body.lastName, req.body.email, hash],
                     (error) => {
                         if (error) {
                             console.log(error);
@@ -32,7 +32,7 @@ exports.registerUser = (req, res) => {
 exports.loginUser = (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    db.query('SELECT userId, password, firstName, lastName, userImageUrl FROM user WHERE email = ?', [email], (error, data) => {
+    db.query('SELECT id, password, firstName, lastName, userImageUrl FROM user WHERE email = ?', [email], (error, data) => {
         if (error) {
             return res.status(400).json({ message: error.message });
         }
@@ -43,19 +43,20 @@ exports.loginUser = (req, res) => {
                     return res.status(401).json({ message: 'Le mot de passe saisie ne correspond pas' });
                 }
                 const token = jwt.sign(
-                    { user: user },
+                    { ...user },
                     '123321190289023',
                     { expiresIn: '24h' }
                 );
+                console.log(user);
                 res.status(200).json({ access_token: token })
             })
             .catch(error => res.status(500).json({ message: error.message }))
     });
 }
 
-exports.getUsers = (req, res, next) => {
+exports.getUsers = (req, res) => {
     console.log(req.params);
-    db.query('SELECT firstName, email, userId, lastName, code_postale, adresse, date_de_naissance, telephone, userImageUrl FROM user WHERE userId = ?', [req.params.id], (error, data) => {
+    db.query('SELECT id, firstName, email, lastName, code_postale, adresse, date_de_naissance, telephone, userImageUrl FROM user WHERE id = ?', [req.params.id], (error, data) => {
         if (error) {
             console.log(error);
             return res.status(500).json({ message: error.message });
@@ -65,7 +66,7 @@ exports.getUsers = (req, res, next) => {
     });
 }
 exports.editUser = (req, res) => {
-    db.query('SELECT userImageUrl FROM user WHERE userId = ?', [req.params.id], (err, data) => {
+    db.query('SELECT userImageUrl FROM user WHERE id = ?', [req.params.id], (err, data) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ message: err.message })
@@ -80,12 +81,15 @@ exports.editUser = (req, res) => {
         const currentImageUrl = data[0].userImageUrl;
         const updateImageUrl = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : currentImageUrl;
         if (req.file && currentImageUrl !== null) {
-            const imageDelete = currentImageUrl.split('/images')[1];
-            fs.unlink(`images/${imageDelete}`, () => {
+            const imageDelete = currentImageUrl.split('/images/')[1];
+            fs.unlink(`images/${imageDelete}`, (err) => {
+                if (err) {
+                    throw err;
+                }
                 console.log('Image supprimé avec succès')
             });
         }
-        db.query('UPDATE user SET lastName = ?, firstName = ?, adresse = ?, code_postale = ?, telephone = ?, date_de_naissance = ?, userImageUrl = ? WHERE userId = ?',
+        db.query('UPDATE user SET lastName = ?, firstName = ?, adresse = ?, code_postale = ?, telephone = ?, date_de_naissance = ?, userImageUrl = ? WHERE id = ?',
             [lastName, firstName, adresse, cp, telephone, date_de_naissance, updateImageUrl, req.params.id],
             (err) => {
                 if (err) {
@@ -98,7 +102,7 @@ exports.editUser = (req, res) => {
     });
 }
 exports.getInfoUser = (req, res) => {
-    db.query('SELECT firstName, userId, lastName, code_postale, adresse, date_de_naissance, telephone, userImageUrl FROM user WHERE userId = ?'
+    db.query('SELECT id, firstName, lastName, code_postale, adresse, date_de_naissance, telephone, userImageUrl FROM user WHERE id = ?'
         , [req.params.id], (err, data) => {
             if (err) {
                 console.log(err)
@@ -110,13 +114,28 @@ exports.getInfoUser = (req, res) => {
 }
 
 exports.deleteUser = (req, res) => {
-    console.log(req.params.id);
-    db.query('DELETE user,commentaires FROM user INNER JOIN commentaires ON user.userId = commentaires.userId WHERE user.userId = ?', [req.params.id],
-        (err) => {
-            if (err) {
-                console.log(err);
-                return res.status(400).json({ message: err.message })
-            }
-            res.status(200).json({ message: 'Votre compte a été supprimer avec succès !' })
-        });
+    db.query('SELECT userImageUrl FROM user WHERE id = ?', [req.params.id], (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+        db.query('DELETE FROM user WHERE id = ?', [req.params.id],
+            (err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).json({ message: err.message })
+                }
+                const imageUrl = data[0].imageUrl;
+                if (imageUrl !== null) {
+                    const image = imageUrl.split('/images/')[1];
+                    fs.unlink(`images/${image}`, (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log('Suppression OK');
+                    });
+                }
+                res.status(200).json({ message: 'Votre compte a été supprimer avec succès !' })
+            });
+
+    });
 }
