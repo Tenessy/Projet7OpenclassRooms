@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Edit } from '../models/edit.model';
 import { UserService } from '../services/user.service';
-import { ActivatedRoute, Router, RouteReuseStrategy } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 
@@ -97,12 +97,13 @@ export class EditUserComponent implements OnInit {
     const id = this.route.snapshot.params['id'];
     this.userService.deleteOneUser(id).subscribe(
       val => {
-        console.log('Le compte  bien été supprimer' + val);
+        console.log('Le compte a bien été supprimé' + val);
+        this.authService.signOut();
         this.router.navigate(['/login']);
       },
       err => {
         console.log(err)
       }
-    )
+    );
   }
 }

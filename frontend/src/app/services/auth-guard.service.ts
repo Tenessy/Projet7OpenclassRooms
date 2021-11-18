@@ -15,11 +15,11 @@ export class AuthGuard implements CanActivate {
         state: RouterStateSnapshot
     ): Observable<boolean> | Promise<boolean> | boolean {
         const decoded = this.authService.authToken();
-        const tokenUserId = decoded.user.userId;
+        const tokenUserId = decoded?.id;
         let currentUserId;
         this.authService.subject.subscribe(
             val => {
-                currentUserId = val?.userId;
+                currentUserId = val?.id;
             }
         );
         if (tokenUserId === currentUserId) {

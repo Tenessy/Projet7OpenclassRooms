@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PostService } from '../services/post.service';
 import { faThumbsUp, faCommentAlt } from '@fortawesome/free-regular-svg-icons';
 import { faShare } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../services/auth.service';
 import { FormControl } from '@angular/forms';
-import { Post } from '../models/post.model';
-import { comment } from 'postcss';
 
 @Component({
   selector: 'app-one-post',
@@ -25,10 +23,11 @@ export class OnePostComponent implements OnInit, OnDestroy {
   faThumbsUp = faThumbsUp;
   faCommentAlt = faCommentAlt;
   faShare = faShare;
-  userId: any;
+  user_id: number | undefined;
   comment = new FormControl('');
   comments: any = [];
   commentHeure: any;
+  post_id: number = this.route.snapshot.params['id'];
 
   today: any = Date.now();
 
@@ -38,17 +37,20 @@ export class OnePostComponent implements OnInit, OnDestroy {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.userPermission();
+    this.authService.subject.subscribe(
+      user => {
+        this.user_id = user?.id;
+        console.log(user?.id);
+      }
+    );
     const id = this.route.snapshot.params['id'];
     this.subscribtion = this.route.params.pipe(
       switchMap((params: Params) => this.postService.getPost(+params['id']))
     ).subscribe(posts => {
-      if (posts.length === 0 || posts.length < 0) {
-        this.router.navigate(['/not-found']);
+      if (posts.length <= 0) {
+        return this.router.navigate(['/not-found']);
       }
-      else {
-        this.posts = posts;
-      }
+      return this.posts = posts;
     });
     this.postService.getCommentsOnePost(id).subscribe(
       comments => {
@@ -57,30 +59,14 @@ export class OnePostComponent implements OnInit, OnDestroy {
       }
     );
   }
-  userPermission() {
-    this.authService.subject.subscribe(
-      val => {
-        this.userId = val?.userId;
-        console.log(val?.userId);
-      }
-    );
-  }
-
   postComment() {
-    console.log(JSON.stringify(this.comment.value));
-    const id = this.route.snapshot.params['id'];
     let user;
     this.authService.subject.subscribe(
       oneUser => {
         user = oneUser
-        console.log(user);
       }
     );
-    let min = 100000;
-    let max = 1000000
-    const comment_id = Math.floor(Math.random() * (max - min)) + min;
     const comment = {
-      comment_id: comment_id,
       commentaire: this.comment.value,
       date: Date.now(),
     }
@@ -88,7 +74,7 @@ export class OnePostComponent implements OnInit, OnDestroy {
     formData.append('comment', JSON.stringify(comment))
     formData.append('user', JSON.stringify(user));
     if (this.comment.value !== "" && formData !== null) {
-      this.postService.postOnePostComment(id, formData).subscribe(
+      this.postService.postOnePostComment(this.post_id, formData).subscribe(
         val => {
           console.log(val)
           this.router.navigate([`/forum`])
@@ -107,9 +93,9 @@ export class OnePostComponent implements OnInit, OnDestroy {
     this.commentaire = comment;
   }
   confirmDeleteComment() {
-    const id = this.route.snapshot.params['id'];
     const commentaire = JSON.stringify(this.commentaire);
-    this.postService.deleteComment(commentaire, id)
+    console.log(commentaire);
+    this.postService.deleteComment(commentaire, this.post_id)
       .subscribe(
         val => {
           console.log(val + 'le commentaire a été supprimé')
@@ -117,12 +103,13 @@ export class OnePostComponent implements OnInit, OnDestroy {
       );
     this.ngOnInit();
   }
-
+  confirmDeletePost() {
+    this.postService.deletedPost.next(true);
+  }
   viewUser(id: any) {
     let link = [`/user/${id}`]
     this.router.navigate(link);
   }
-
   ngOnDestroy() {
     this.subscribtion.unsubscribe();
   }

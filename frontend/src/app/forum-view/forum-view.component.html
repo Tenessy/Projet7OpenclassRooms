@@ -8,12 +8,8 @@
                     <div class="card m-2 pb-3" style="width: 22rem;">
                         <app-publication [post]="post"></app-publication>
                         <div class="d-grid gap-2 col-11 mx-auto mt-0">
-                            <button class="btn btn-primary" [routerLink]="['/forum', post.postId?.toString()]">
+                            <button class="btn btn-primary" [routerLink]="['/forum', post.id?.toString()]">
                                 <span class="lora">Voir la publication</span>
-                            </button>
-                            <button class="btn btn btn-danger" *ngIf="post.userId === user.userId"
-                                (click)="deletePost(post)">
-                                <span class="lora">Supprimer la publication</span>
                             </button>
                         </div>
                     </div>
@@ -22,3 +18,21 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="examplePost" tabindex="-1" aria-labelledby="examplePostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="examplePostLabel">Suppresion de la publication</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer votre publication ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="confirmDeletePost()">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>

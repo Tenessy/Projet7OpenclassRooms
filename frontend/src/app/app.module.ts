@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppRoutingModule } from './app-routing.module';
-import { NgbActiveModal, NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import localeFr from '@angular/common/locales/fr';
 registerLocaleData(localeFr, 'fr');
@@ -16,22 +16,18 @@ import { LoginComponent } from './login/login.component';
 import { PostService } from './services/post.service';
 import { registerLocaleData } from '@angular/common';
 import { ForumViewComponent } from './forum-view/forum-view.component';
-import { RouterModule, Routes } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { OnePostComponent } from './one-post/one-post.component';
 import { PublierComponent } from './publier/publier.component';
 import { FourOhFourComponent } from './four-oh-four/four-oh-four.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { UserService } from './services/user.service';
-import { NewUserComponent } from './new-user/new-user.component';
+import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
 import { TokenInterceptor } from './services/tokenInterceptor';
 import { EditUserComponent } from './edit-user/edit-user.component';
-import { OnePostCommentComponent } from './one-post-comment/one-post-comment.component';
 import { PublicationComponent } from './publication/publication.component';
 import { TestComponent } from './test/test.component';
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,13 +36,11 @@ import { TestComponent } from './test/test.component';
     OnePostComponent,
     PublierComponent,
     FourOhFourComponent,
-    NewUserComponent,
+    UserComponent,
     RegisterComponent,
     EditUserComponent,
-    OnePostCommentComponent,
     PublicationComponent,
     TestComponent,
-
   ],
   imports: [
     BrowserModule,

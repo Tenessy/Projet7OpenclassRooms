@@ -1,57 +1,70 @@
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Post } from "../models/post.model";
-import { of } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PostService {
-
-    postSubject = new Subject<any[]>();
+    public postsSubject: Subject<boolean>;
+    constructor(private http: HttpClient) {
+        this.postsSubject = new Subject<boolean>();
+    }
+    posts: Post[] = [];
+    deletedPost = new BehaviorSubject<boolean>(false);
     apiHost: string = 'http://localhost:3000/api'
-
-    constructor(private http: HttpClient) { }
 
     getPost(id: number): Observable<Post[]> {
         return this.http.get<Post[]>(`${this.apiHost}/forum/${id}`);
     }
     getPostsFromServer() {
-        return this.http.get<any[]>(`${this.apiHost}/forum`);
+        return this.http.get<Post[]>(`${this.apiHost}/forum`);
     }
-    newPost(data: any) {
+    newPost(post: Post) {
         const apiUrl = `${this.apiHost}/forum`;
-        return this.http.post<any>(apiUrl, data, {
+        return this.http.post<Post[]>(apiUrl, post, {
             reportProgress: true,
             observe: 'events'
         });
     }
-    postOnePostComment(id: any, comment: any): Observable<Post[]> {
-        return this.http.post<Post[]>(`${this.apiHost}/forum/${id}/comment`, comment);
-    }
-    getCommentsOnePost(id: any) {
-        return this.http.get(`${this.apiHost}/forum/${id}/comment`);
-    }
-    updatePost(data: any) {
-        return this.http.put(`${this.apiHost}/forum`, data);
-    }
-    postLike(data: any) {
-        return this.http.post(`${this.apiHost}/forum/likes`, data);
-    }
-    getLikes() {
-        return this.http.get(`${this.apiHost}/forum/like/user`);
-    }
-    deleteLike(post: any) {
+    deletePost(post: Post) {
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
             }),
-            body: { post: post }
+            body: { post_id: post.id }
+        };
+        return this.http.delete(`${this.apiHost}/forum`, options);
+    }
+    postOnePostComment(id: number, comment: any): Observable<Post[]> {
+        return this.http.post<Post[]>(`${this.apiHost}/forum/${id}/comment`, comment);
+    }
+    getAllComments() {
+        return this.http.get(`${this.apiHost}/forum/comment`);
+    }
+    getCommentsOnePost(id: number) {
+        return this.http.get(`${this.apiHost}/forum/${id}/comment`);
+    }
+    updatePost(post: Post) {
+        return this.http.put(`${this.apiHost}/forum`, post);
+    }
+    postLike(like: any) {
+        return this.http.post(`${this.apiHost}/forum/likes`, like);
+    }
+    getLikes() {
+        return this.http.get(`${this.apiHost}/forum/like/user`);
+    }
+    deleteLike(like: any) {
+        const options = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+            body: like
         };
         return this.http.delete(`${this.apiHost}/forum/like/user`, options);
     }
-    deleteComment(comment: any, id: any) {
+    deleteComment(comment: any, id: number) {
         const options = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

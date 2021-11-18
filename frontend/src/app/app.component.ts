@@ -33,12 +33,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscritpion.unsubscribe();
   }
   viewUser() {
-    const user: any = localStorage.getItem('currentUser');
-    const id = JSON.parse(user).user.userId;
-    const link = ['/user/', id];
-    this.router.navigate(link);
+    this.authService.subject.subscribe(
+      user => {
+        const link = ['/user/', user?.id];
+        this.router.navigate(link);
+      }
+    );
   }
-
   signOut() {
     this.authService.signOut()
     this.router.navigate(['/login']);

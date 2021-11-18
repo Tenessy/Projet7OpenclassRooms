@@ -23,3 +23,6 @@ img {
     height: 80px;
     object-fit: cover;
 }
+a {
+    cursor: pointer;
+}

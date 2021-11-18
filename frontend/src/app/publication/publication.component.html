@@ -20,6 +20,18 @@
                     'd':'+0000' }} j </h3>
             </div>
         </div>
+        <div class="btn-group" *ngIf="post.user_id === userId" style="margin-left: 100px; height: 40px;">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                ...
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="deletePost(post)" data-bs-toggle="modal"
+                        data-bs-target="#examplePost">Supprimer la
+                        publication</a></li>
+                <li><a class="dropdown-item" href="#">Information sur la publication</a></li>
+            </ul>
+        </div>
     </div>
     <p class="card-text" style="font-size: 16px">{{ post.texte }}</p>
 </div>
@@ -43,7 +55,7 @@
             </div>
         </div>
         <div class="col-4">
-            <a [routerLink]="['/forum/', post.postId]" fragment="comment">
+            <a [routerLink]="['/forum/', post.id]" fragment="comment">
                 <fa-icon class="hover-color" [icon]="faCommentAlt" style="font-size: 20px;"></fa-icon>
             </a>
             <span class="lora gras" style="margin-top: -10px;"> {{ post.nbrCommentaires }} </span>

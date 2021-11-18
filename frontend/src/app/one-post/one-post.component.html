@@ -9,8 +9,10 @@
                             <label class="sr-only" for="comment">Commentaire</label>
                             <input class="texteStyle" placeholder="Écrivez un commentaire..." id="comment"
                                 [formControl]="comment"><br><br>
-                            <div class="d-grid gap-2 col-8 mx-auto mt-0">
-                                <button type="submit" (click)="postComment()" class="btn btn-primary">Poster</button>
+                            <div class="d-grid gap-2 col-10 mx-auto mt-0">
+                                <button type="submit" (click)="postComment()" class="btn btn-primary">
+                                    <span class="lora gras">Poster</span>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -22,23 +24,21 @@
                         <img [src]="comment.userImageUrl" class="avatar">
                     </div>
                     <h3 class="lora gras">
-                        <a routerLink="" (click)="viewUser(comment.userId)">{{ comment.firstName }}</a>
+                        <a routerLink="" (click)="viewUser(comment.user_id)">{{ comment.firstName }}</a>
                     </h3>
-                    <h4 class="lora heure" *ngIf="today - comment.commentDate <= 60000">{{ today -
-                        comment.commentDate |
+                    <h4 class="lora heure" *ngIf="today - comment.date <= 60000">{{ today -
+                        comment.date |
                         date:'s':'+0000' }} sec </h4>
-                    <h4 class="lora heure"
-                        *ngIf="today - comment.commentDate >= 60000 && today - comment.commentDate < 3600000">
-                        {{ today - comment.commentDate | date: 'm':'+0000' }} min </h4>
-                    <h4 class="lora heure"
-                        *ngIf="today - comment.commentDate >= 3600000 && today - comment.commentDate < 86400000">
-                        {{ today - comment.commentDate | date:
+                    <h4 class="lora heure" *ngIf="today - comment.date >= 60000 && today - comment.date < 3600000">
+                        {{ today - comment.date | date: 'm':'+0000' }} min </h4>
+                    <h4 class="lora heure" *ngIf="today - comment.date >= 3600000 && today - comment.date < 86400000">
+                        {{ today - comment.date | date:
                         'H':'+0000'}} h </h4>
-                    <h4 class="lora heure" *ngIf="today - comment.commentDate >= 86400000">{{ today -
-                        comment.commentDate | date:
+                    <h4 class="lora heure" *ngIf="today - comment.date >= 86400000">{{ today -
+                        comment.date | date:
                         'd':'+0000' }} j </h4>
                     <h3 class="lora fin comment">{{ comment.commentaire }}</h3><br>
-                    <button type="button" class="btn btn-link mt-4" *ngIf="comment.userId === userId"
+                    <button type="button" class="btn btn-link mt-4" *ngIf="comment.user_id === user_id"
                         data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="deleteComment(comment)">
                         <span class="lora fin">Supprimer</span>
                     </button>
@@ -61,6 +61,24 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
                     (click)="confirmDeleteComment()">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="examplePost" tabindex="-1" aria-labelledby="examplePostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="examplePostLabel">Suppresion du commentaire</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer votre commentaire ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="confirmDeletePost()">Supprimer</button>
             </div>
         </div>
     </div>
