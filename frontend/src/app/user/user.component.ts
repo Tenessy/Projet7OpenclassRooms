@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user',
@@ -11,48 +13,48 @@ import { UserService } from '../services/user.service';
     '../../../node_modules/bootstrap/dist/css/bootstrap.css']
 })
 
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   @Input() infoUsers: any = [];
   userForm: FormGroup;
   user: any = [];
-
+  userSubscription = new Subscription();
   constructor(
     private userSerice: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService) { }
-  userId: any;
+  userId: number | undefined;
   ngOnInit(): void {
-    console.log(this.isAuth())
     const id = this.route.snapshot.params['id'];
-    this.userSerice.getUser(id).subscribe(
+    this.userSubscription.add(this.userSerice.getUser(id).subscribe(
       user => {
-        console.log(user);
         if (user.length <= 0) {
-          return this.router.navigate(['/not-found']);
+          this.router.navigate(['/not-found']);
         }
-        return this.user = user;
+        else {
+          this.user = user;
+        }
       }
-    );
-    this.authService.subject.subscribe(
+    ));
+    this.userSubscription.add(this.authService.subject.subscribe(
       user => {
         this.userId = user?.id;
       }
-    );
-  }
-  isAuth() {
-    const id = JSON.parse(this.route.snapshot.params['id']);
-    if (id === this.userId) {
-      return true
-    }
-    else {
-      return false;
-    }
+    ));
   }
   editUser() {
     const id = this.route.snapshot.params['id'];
     let link = [`/user/${id}/edit`];
     this.router.navigate(link);
   }
-
+  isUser() {
+    const id = this.route.snapshot.params['id'];
+    if (JSON.stringify(this.userId) === id) {
+      return true;
+    }
+    return false;
+  }
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+  }
 }

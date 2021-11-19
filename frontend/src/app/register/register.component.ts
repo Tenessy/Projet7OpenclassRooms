@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,7 @@ import { UserService } from '../services/user.service';
 export class RegisterComponent implements OnInit {
 
   userForm: FormGroup;
+  registerSubscription: Subscription;
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
@@ -22,10 +24,10 @@ export class RegisterComponent implements OnInit {
   }
   initForm() {
     this.userForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ- \'\]+$')]],
+      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ- \'\]+$')]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern('^[a-zA-Z0-9]+$')]],
     });
   }
   onSubmitForm() {
@@ -48,5 +50,7 @@ export class RegisterComponent implements OnInit {
       );
   }
 }
+
+
 
 

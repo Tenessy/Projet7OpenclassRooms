@@ -33,7 +33,7 @@ export class PublicationComponent implements OnInit, OnDestroy {
   faCommentAlt = faCommentAlt;
   faShare = faShare;
   userId: number | undefined;
-  subscription: Subscription;
+  private subscription = new Subscription();
   today: number = Date.now();
   goComment(id: number) {
     let link = [`/forum/${id}/#comment`];
@@ -45,38 +45,38 @@ export class PublicationComponent implements OnInit, OnDestroy {
       post_id: post.id,
       user_id: this.userId
     }
-    this.postService.postLike(like).subscribe(
+    this.subscription.add(this.postService.postLike(like).subscribe(
       data => {
         console.log(data);
         this.post.likeStatus = true;
         this.ngOnInit();
       }
-    );
+    ));
   }
   unLike(post: Post) {
     const like = {
       post_id: post.id,
       user_id: this.userId
     }
-    this.postService.deleteLike(like).subscribe(
+    this.subscription.add(this.postService.deleteLike(like).subscribe(
       data => {
         console.log(data);
         this.post.likeStatus = false;
         this.ngOnInit();
       }
-    );
+    ));
   }
   deletePost(post: Post) {
-    this.subscription = this.postService.deletedPost.subscribe(
+    this.subscription.add(this.postService.deletedPost.subscribe(
       (data: boolean) => {
         if (data) {
           this.confirmPostDelete(post);
         }
       }
-    );
+    ));
   }
   confirmPostDelete(post: Post) {
-    this.subscription = this.postService.deletePost(post)
+    this.postService.deletePost(post)
       .subscribe({
         next: val => {
           console.log('le post a bien été supprimé' + val);
@@ -90,23 +90,23 @@ export class PublicationComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit() {
-    this.auth.subject.subscribe(
+    this.subscription.add(this.auth.subject.subscribe(
       user => {
         this.userId = user?.id;
       }
-    );
-    this.getAllLikes();
-    this.subscription = this.postService.getAllComments()
+    ));
+    this.subscription.add(this.getAllLikes());
+    this.subscription.add(this.postService.getAllComments()
       .subscribe(
         comments => {
           const AllComments: any = comments;
           const comment = AllComments && AllComments.filter((comment: any) => this.post.id === comment.post_id);
           this.post.nbrCommentaires = comment.length;
         }
-      );
+      ));
   }
   getAllLikes() {
-    this.subscription = this.postService.getLikes()
+    this.postService.getLikes()
       .subscribe(
         likes => {
           const AllLikes: any = likes;

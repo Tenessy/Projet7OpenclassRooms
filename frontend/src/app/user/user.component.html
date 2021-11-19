@@ -1,6 +1,6 @@
 <div class="d-flex flex-column align-items-center mt-4" *ngFor="let AnUser of user">
     <div class="card" style="width: 30rem;">
-        <div class="card-img" *ngIf="user.imageUrl !== null">
+        <div class="card-img" *ngIf="user.userImageUrl !== null">
             <img class="card-img" [src]="AnUser.userImageUrl">
         </div>
         <div class="card-header bg-info text-center" style="height: 80px;">
@@ -28,7 +28,7 @@
             </li>
         </ul>
     </div>
-    <button class="btn btn-primary mt-4" [disabled]="!isAuth()" (click)="editUser()">
+    <button class="btn btn-primary mt-4" [disabled]="!isUser()" (click)="editUser()">
         <h4 class="lora"><strong>Modifier les informations</strong></h4>
     </button>
 </div>

@@ -13,7 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class AppComponent implements OnInit, OnDestroy {
 
   secondes: number;
-  subscritpion: Subscription;
+  subscritpion = new Subscription();
   user: BehaviorSubject<User | null>;
 
   constructor(private authService: AuthService,
@@ -21,16 +21,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const counter = interval(1000);
-    this.subscritpion = counter.subscribe(
+    this.subscritpion.add(counter.subscribe(
       (value: number) => {
         this.secondes = value;
       },
-    );
+    ));
     this.user = this.authService.subject;
-  }
-
-  ngOnDestroy() {
-    this.subscritpion.unsubscribe();
   }
   viewUser() {
     this.authService.subject.subscribe(
@@ -43,5 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
   signOut() {
     this.authService.signOut()
     this.router.navigate(['/login']);
+  }
+  ngOnDestroy() {
+    this.subscritpion.unsubscribe();
   }
 }

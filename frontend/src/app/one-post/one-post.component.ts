@@ -18,7 +18,7 @@ export class OnePostComponent implements OnInit, OnDestroy {
 
   userName: string;
   texte: string;
-  subscribtion: Subscription;
+  postSubscribtion = new Subscription();
   public posts: any = [];
   faThumbsUp = faThumbsUp;
   faCommentAlt = faCommentAlt;
@@ -44,49 +44,47 @@ export class OnePostComponent implements OnInit, OnDestroy {
       }
     );
     const id = this.route.snapshot.params['id'];
-    this.subscribtion = this.route.params.pipe(
+    this.postSubscribtion.add(this.route.params.pipe(
       switchMap((params: Params) => this.postService.getPost(+params['id']))
     ).subscribe(posts => {
       if (posts.length <= 0) {
         return this.router.navigate(['/not-found']);
       }
       return this.posts = posts;
-    });
-    this.postService.getCommentsOnePost(id).subscribe(
+    }));
+    this.postSubscribtion.add(this.postService.getCommentsOnePost(id).subscribe(
       comments => {
         this.comments = comments;
         console.log(this.comments);
       }
-    );
+    ));
   }
   postComment() {
-    let user;
-    this.authService.subject.subscribe(
-      oneUser => {
-        user = oneUser
-      }
-    );
-    const comment = {
-      commentaire: this.comment.value,
-      date: Date.now(),
-    }
-    const formData: any = new FormData();
-    formData.append('comment', JSON.stringify(comment))
-    formData.append('user', JSON.stringify(user));
-    if (this.comment.value !== "" && formData !== null) {
-      this.postService.postOnePostComment(this.post_id, formData).subscribe(
-        val => {
-          console.log(val)
-          this.router.navigate([`/forum`])
-        },
-        error => {
-          console.log(error)
+    this.postSubscribtion.add(this.authService.subject.subscribe(
+      user => {
+        const comment = {
+          commentaire: this.comment.value,
+          date: Date.now(),
         }
-      );
-    }
-    else {
-      console.log('La requête n\'a pas pu aboutir, veuillez remplir le champs');
-    }
+        const formData: any = new FormData();
+        formData.append('comment', JSON.stringify(comment))
+        formData.append('user', JSON.stringify(user));
+        if (this.comment.value !== "" && formData !== null) {
+          this.postService.postOneComment(this.post_id, formData).subscribe(
+            val => {
+              console.log(val)
+              this.router.navigate([`/forum`])
+            },
+            error => {
+              console.log(error)
+            }
+          );
+        }
+        else {
+          console.log('La requête n\'a pas pu aboutir, veuillez remplir le champs');
+        }
+      }
+    ));
   }
   commentaire: any;
   deleteComment(comment: any) {
@@ -95,12 +93,12 @@ export class OnePostComponent implements OnInit, OnDestroy {
   confirmDeleteComment() {
     const commentaire = JSON.stringify(this.commentaire);
     console.log(commentaire);
-    this.postService.deleteComment(commentaire, this.post_id)
+    this.postSubscribtion.add(this.postService.deleteOneComment(commentaire, this.post_id)
       .subscribe(
         val => {
           console.log(val + 'le commentaire a été supprimé')
         }
-      );
+      ));
     this.ngOnInit();
   }
   confirmDeletePost() {
@@ -111,7 +109,7 @@ export class OnePostComponent implements OnInit, OnDestroy {
     this.router.navigate(link);
   }
   ngOnDestroy() {
-    this.subscribtion.unsubscribe();
+    this.postSubscribtion.unsubscribe();
   }
 
 }

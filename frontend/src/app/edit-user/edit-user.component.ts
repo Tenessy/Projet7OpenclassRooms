@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Edit } from '../models/edit.model';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -68,20 +68,19 @@ export class EditUserComponent implements OnInit {
     formData.append('userEdit', JSON.stringify(userEdit))
     this.userService.editUser(id, formData)
       .subscribe(
-        data => {
+        () => {
           this.router.navigate([`/user/${id}`]);
-          console.log(data);
         }
       );
   }
   initForm() {
     this.userForm = this.formBuilder.group({
-      firstName: [''],
-      lastName: [''],
+      firstName: ['', [Validators.pattern('^[a-zA-ZÀ-ÿ- \'\]+$')]],
+      lastName: ['', [Validators.pattern('^[a-zA-ZÀ-ÿ- \'\]+$')]],
       date_de_naissance: [this.date],
-      adresse: [''],
-      cp: [''],
-      telephone: [''],
+      adresse: ['', [Validators.pattern('^[a-zA-ZÀ-ÿ0-9 \'\]+$')]],
+      cp: ['', [Validators.pattern('^[0-9]{5}')]],
+      telephone: ['', [Validators.pattern('^[0-9]{10}')]],
       image: [this.file]
     });
   }

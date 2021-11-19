@@ -19,7 +19,7 @@ export class PublierComponent implements OnInit, OnDestroy {
   public imageName: string;
 
   postForm: FormGroup;
-  formSubscription: Subscription;
+  formSubscription = new Subscription();
   constructor(private postService: PostService,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -38,7 +38,7 @@ export class PublierComponent implements OnInit, OnDestroy {
     this.formSubscription = this.auth.subject.subscribe(
       user => {
         this.postForm = this.formBuilder.group({
-          texte: ['', [Validators.required, Validators.minLength(6)]],
+          texte: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÿ0-9 \'\.\,]+$')]],
           date: [Date.now(), [Validators.required]],
           nbrLikes: [0, [Validators.required]],
           nbrCommentaires: [0, [Validators.required]],
@@ -65,13 +65,11 @@ export class PublierComponent implements OnInit, OnDestroy {
     formData.append('image', this.image);
     formData.append('post', JSON.stringify(post));
 
-    this.postService.newPost(formData).subscribe(
+    this.formSubscription.add(this.postService.newPost(formData).subscribe(
       () => {
-        this.postService.posts.push(post);
         this.postService.postsSubject.next(true);
-        console.log(post);
-      },
-    );
+      }
+    ));
     this.router.navigate(['/forum']);
   }
   ngOnDestroy() {

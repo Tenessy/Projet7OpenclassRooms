@@ -12,6 +12,12 @@ export class UserService {
 
     private apiUrl: string = 'http://localhost:3000/api/auth';
 
+    register(user: User): Observable<User[]> {
+        return this.http.post<User[]>(`${this.apiUrl}/signup`, user)
+    }
+    login(email: string, password: string) {
+        return this.http.post<any>(`${this.apiUrl}/login`, { email, password });
+    }
     getUser(id: number): Observable<User[]> {
         return this.http.get<User[]>(`${this.apiUrl}/user/${id}`)
     }
@@ -23,11 +29,5 @@ export class UserService {
     }
     getInfoUser(id: any): Observable<Edit[]> {
         return this.http.get<Edit[]>(`${this.apiUrl}/user/${id}/edit`);
-    }
-    register(user: User): Observable<User[]> {
-        return this.http.post<User[]>(`${this.apiUrl}/signup`, user)
-    }
-    login(email: string, password: string) {
-        return this.http.post<any>(`${this.apiUrl}/login`, { email, password });
     }
 }

@@ -1,18 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { HttpResponse } from '@angular/common/http';
-import { first } from 'rxjs/operators'
-import { from, pipe, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
 
   authStatus: boolean;
   loginForm: FormGroup;
@@ -27,17 +25,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       return false;
     }
   }
-
   ngOnInit(): void {
     this.initForm();
   }
   initForm() {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      password: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]]
     });
   }
-  public users: any[];
 
   get f() { return this.loginForm.controls; }
 
@@ -45,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     const formUser = this.loginForm.value;
     const email = formUser.email;
     const password = formUser.password;
-    this.subscription = this.userService.login(email, password)
+    this.userService.login(email, password)
       .subscribe({
         next: result => {
           this.authService.signIn(result);
@@ -59,11 +55,4 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSignOut() {
     this.authService.signOut();
   }
-
-  ngOnDestroy() {
-    // localStorage.removeItem('user');
-    // localStorage.removeItem('currenUser');
-    //  this.subscription.unsubscribe();
-  }
-
 }

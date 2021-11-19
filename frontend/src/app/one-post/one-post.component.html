@@ -8,7 +8,7 @@
                         <div class="form-group text-center">
                             <label class="sr-only" for="comment">Commentaire</label>
                             <input class="texteStyle" placeholder="Écrivez un commentaire..." id="comment"
-                                [formControl]="comment"><br><br>
+                                [formControl]="comment" pattern="^[a-zA-ZÀ-ÿ0-9]+$"><br><br>
                             <div class="d-grid gap-2 col-10 mx-auto mt-0">
                                 <button type="submit" (click)="postComment()" class="btn btn-primary">
                                     <span class="lora gras">Poster</span>
