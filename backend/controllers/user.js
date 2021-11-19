@@ -118,13 +118,14 @@ exports.deleteUser = (req, res) => {
         if (err) {
             return res.status(500).json({ message: err.message });
         }
-        db.query('DELETE FROM user WHERE id = ?', [req.params.id],
+        console.log(req);
+        db.query('DELETE FROM user WHERE user.id = ?', [req.params.id],
             (err) => {
                 if (err) {
                     console.log(err);
                     return res.status(400).json({ message: err.message })
                 }
-                const imageUrl = data[0].imageUrl;
+                const imageUrl = data[0].userImageUrl;
                 if (imageUrl !== null) {
                     const image = imageUrl.split('/images/')[1];
                     fs.unlink(`images/${image}`, (err) => {

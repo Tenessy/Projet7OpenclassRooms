@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, '123321190289023');
         const decodedUserId = decoded.id;
-        db.query('SELECT id from user WHERE id = ?', [decodedUserId], (err, data) => {
+        db.query('SELECT id FROM user WHERE user.id = ?', [decodedUserId], (err, data) => {
             if (err) {
                 return res.status(500).json({ message: err.message })
             }
